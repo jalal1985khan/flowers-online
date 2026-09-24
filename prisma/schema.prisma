@@ -366,3 +366,31 @@ model AuditLog {
   @@index([entityType, entityId])
 }
 
+model SeoLandingPage {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  title           String   // e.g. "Anniversary Cake Delivery in Guwahati"
+  heading         String   // e.g. "Send Fresh Anniversary Cakes to Guwahati Same-Day & Midnight"
+  subheading      String?  // Hero subtitle
+  metaTitle       String?  // SEO Meta Title
+  metaDescription String?  // SEO Meta Description
+  city            String   @default("Guwahati")
+  categorySlug    String?  // "cakes", "flowers", "combos"
+  occasionSlug    String?  // "anniversary", "birthday", "love-and-romance"
+  flavorOrType    String?  // "chocolate", "caramel", "photo", "bento"
+  badgeText       String?  @default("Same-Day & Midnight Delivery")
+  heroImage       String?
+  introHtml       String?  // Rich description / HTML introduction
+  contentBody     String?  // Extended SEO copy
+  deliveryAreas   String[] // Local areas covered
+  faqs            Json?    // Array of { q: string, a: string }
+  popularKeywords String[] // Array of search tag keywords
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([slug])
+  @@index([city])
+  @@index([isActive])
+}
+

@@ -599,6 +599,11 @@ async function main() {
     ],
   });
 
+  console.log("🌸 Seeding 43 Guwahati SEO Landing Pages...");
+  const { seedSeoLandingPages } = await import("../src/lib/seo-pages-seed");
+  const seoResult = await seedSeoLandingPages();
+  console.log(`✅ Seeded SEO Pages: ${seoResult.created} created, ${seoResult.updated} updated`);
+
   console.log("✅ Seed completed successfully!");
 }
 

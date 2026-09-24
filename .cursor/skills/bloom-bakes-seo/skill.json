@@ -1,0 +1,10 @@
+{
+  "name": "bloom-bakes-seo",
+  "version": "1.0.0",
+  "display_name": "Bloom & Bakes SEO",
+  "description": "Complete SEO engineering skill for Bloom & Bakes flower and cake delivery ecommerce.",
+  "entrypoint": "SKILL.md",
+  "domain": "ecommerce-seo",
+  "framework": "Next.js App Router",
+  "business": "online flower and cake delivery"
+}

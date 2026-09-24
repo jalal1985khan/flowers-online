@@ -9,6 +9,30 @@
 
 ## Release & Enhancement History
 
+### [v1.6.0] – 2026-09-25: Dedicated SEO Landing Pages Engine & Admin CMS Control
+- **Category:** Local SEO Growth & Admin CMS Management
+- **Enhancements:**
+  - **Prisma Data Model (`SeoLandingPage`):** Added complete schema in `prisma/schema.prisma` supporting slug, title, heading, subheading, metaTitle, metaDescription, categorySlug, occasionSlug, flavorOrType, badgeText, introHtml, contentBody, deliveryAreas, faqs, popularKeywords, and isActive.
+  - **Comprehensive Seed Data (`src/lib/seo-pages-seed.ts`):** Defined rich, customized content for all 43 Guwahati search terms from the reference image (Anniversary Cake Delivery, Birthday Cakes for Girls, Send Flowers, KitKat Oreo, Cartoon Theme, Vintage Heart, etc.).
+  - **Admin CMS Dashboard & Editor (`/admin/seo`):**
+    - Live stats bar displaying Total Pages (43), Live Pages (43), Target Region, and Schema.org structured data.
+    - Search bar and category/status filter controls.
+    - 1-click "Sync All 43 Pages" button.
+    - Multi-tab visual editor with live Google Search SERP snippet preview, character counters, FAQ question/answer manager, and instant database save.
+  - **Admin API Endpoints:** Built `/api/admin/seo-pages` and `/api/admin/seo-pages/[id]` supporting CRUD and seed synchronization.
+  - **Dynamic Storefront Route (`src/app/(storefront)/[slug]/page.tsx`):**
+    - Server-side rendered for instant TTFB and optimal Core Web Vitals (LCP) performance.
+    - Dynamic metadata generation, OpenGraph, and Canonical URL tags.
+    - Schema.org JSON-LD structured data (`BreadcrumbList`, `LocalBusiness`, `FAQPage`).
+    - Filtered live product catalog grid matching category/occasion.
+    - Guwahati 40+ delivery areas coverage and delivery slot timing cards.
+    - Accessible `<details>`/`<summary>` FAQ accordions.
+    - Interconnected 43-link popular search cloud for maximum internal link equity.
+  - **Storefront Linking Update:** Linked all 43 popular search pills in `guwahati-seo-section.tsx` and `/city/guwahati` to their dedicated `/${slug}` landing pages.
+  - **Verification:** Production build `npm run build` succeeded with code `0` (all 27 routes compiled); verified live HTTP 200 responses on storefront and admin endpoints.
+
+---
+
 ### [v1.5.5] – 2026-09-25: Official SVG Brand Icons for Footer Payment Badges
 - **Category:** Storefront Footer & Trust UI
 - **Enhancements:**

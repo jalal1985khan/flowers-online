@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
-import { ShieldCheck, ArrowLeft, Store, Sparkles, UserCheck } from "lucide-react";
+import { ShieldCheck, ArrowLeft, Store, Sparkles, UserCheck, Globe } from "lucide-react";
 import { AdminLogoutButton } from "@/components/admin/admin-logout-button";
 
 export default async function AdminLayout({
@@ -52,6 +52,14 @@ export default async function AdminLayout({
                 {session.role}
               </span>
             </div>
+
+            <Link
+              href="/admin/seo"
+              className="flex items-center gap-1.5 rounded-lg border border-blue-500/40 bg-blue-950/40 px-3 py-1.5 text-blue-300 hover:bg-blue-900/50 transition font-semibold"
+            >
+              <Globe className="h-3.5 w-3.5 text-blue-400" />
+              <span>SEO Pages</span>
+            </Link>
 
             <Link
               href="/admin/growth"
