@@ -4,6 +4,32 @@ This document records chronological development sessions, specific user requests
 
 ---
 
+## Session 5: FNP-Style Full-Width Mega Menu & Mobile Navigation
+- **Timestamp:** 2026-09-25 00:08 - 00:11 IST
+- **User Prompt:**
+  - *"in menu we need to mega menu like same website have in fnp.com and other website mega menu"*
+- **Actions Taken:**
+  1. Built full-width desktop **Mega Menu** (`src/components/storefront/mega-menu.tsx`) patterned after Ferns N Petals (FNP) and top gifting marketplaces:
+     - 7 high-conversion departments: Flowers, Cakes, Combos & Hampers, Chocolates & Sweets, Plants, Occasions, and Express Same-Day & Midnight.
+     - 4-column sub-navigation per category (varieties, arrangements, occasions, budget & speed).
+     - Visual merchandising card on every dropdown featuring photo, badge, title, subtitle, and instant CTA button.
+     - Bottom trust strip displaying quality guarantees, live tracking, and quick links.
+     - Cursor exit debouncing (180ms delay) to prevent abrupt menu collapse.
+  2. Upgraded Storefront Header (`src/components/storefront/header.tsx`):
+     - Integrated desktop `<MegaMenu />` into the navigation bar with active delivery indicators.
+     - Replaced basic mobile menu with an interactive **mobile department accordion** allowing users to expand categories and jump straight to specific sub-collections.
+  3. Updated `UPDATE_LOG.md` (v1.4.0) and `SESSION_LOG.md`.
+- **Verification:**
+  - Build test: `npm run build` ran Turbopack compilation and completed with code `0`.
+  - HTTP test: Verified `GET /` responded with status 200.
+- **Files Modified / Created:**
+  - `src/components/storefront/mega-menu.tsx` (created)
+  - `src/components/storefront/header.tsx` (modified)
+  - `UPDATE_LOG.md` (updated)
+  - `SESSION_LOG.md` (updated)
+
+---
+
 ## Session 4: Supabase Setup, Git Attributions & Documentation System
 - **Timestamp:** 2026-09-25 00:00 - 00:08 IST
 - **User Prompt:**

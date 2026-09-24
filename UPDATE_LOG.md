@@ -9,6 +9,25 @@
 
 ## Release & Enhancement History
 
+### [v1.4.0] – 2026-09-25: FNP-Style Full-Width Mega Menu & Mobile Drawer
+- **Category:** Storefront UX & Conversion Navigation
+- **Enhancements:**
+  - Designed & implemented comprehensive **FNP / IGP-style Mega Menu** (`src/components/storefront/mega-menu.tsx`).
+  - **7 Primary Departments:** Flowers, Cakes, Combos & Hampers, Chocolates & Sweets, Plants, Occasions, and Express Same-Day & Midnight.
+  - **Multi-Column Deep Categorization:**
+    - Flowers: By Variety (Roses, Lilies, Carnations), By Arrangement (Bouquets, Boxes, Vases), By Occasion, and By Budget.
+    - Cakes: By Flavor (Truffle, Red Velvet, Cheesecake), By Diet (100% Eggless, Heart-Shaped, Photo Cakes), and By Weight.
+    - Combos: Gift pairings (Flowers + Cake, Cake + Teddy, Hampers), By Recipient (For Her, For Him).
+    - Chocolates: Ferrero bouquets, artisan pralines, and Indian mithai.
+    - Plants: Air-purifying, lucky bamboo, and jade in ceramic pots.
+    - Express Delivery: 2-hour express links, midnight delivery slots, and city hubs.
+  - **Visual Merchandising Promo Cards:** Each dropdown features a dedicated product teaser with photo, bestseller/trending badge, and direct 1-click CTA button.
+  - **Interactive Hover Debouncing:** Built smooth cursor-transition delay (180ms) to eliminate dropdown flickering.
+  - **Mobile Accordion Navigation Drawer:** Mobile menu upgraded to an expandable department accordion with direct sub-links and city selector.
+  - Full production build tested and verified with zero errors.
+
+---
+
 ### [v1.3.0] – 2026-09-25: Supabase SDK & SSR Infrastructure Integration
 - **Commit:** [`231ac0d`](https://github.com/jalal1985khan/flowers-online/commit/231ac0d)
 - **Category:** Infrastructure & External BaaS Integration

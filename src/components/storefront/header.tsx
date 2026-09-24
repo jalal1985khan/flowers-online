@@ -20,11 +20,13 @@ import {
   LogOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { MegaMenu, MEGA_MENU_CATEGORIES } from "./mega-menu";
 
 export function Header() {
   const { location, setIsPincodeModalOpen } = useLocation();
   const { itemCount } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [expandedMobileCat, setExpandedMobileCat] = useState<string | null>("flowers");
   const [currentUser, setCurrentUser] = useState<{ name: string; email: string; role: string } | null>(null);
 
   React.useEffect(() => {
@@ -165,87 +167,162 @@ export function Header() {
           </div>
         </div>
 
-        {/* Secondary Navigation row */}
-        <nav className="hidden lg:block border-t border-rose-100/60 bg-white px-4 py-2">
-          <div className="mx-auto flex max-w-7xl items-center justify-between text-xs font-medium text-zinc-700">
-            <div className="flex items-center gap-6">
-              <Link href="/catalog?category=flowers" className="hover:text-rose-600 transition">
-                🌹 Fresh Flowers
-              </Link>
-              <Link href="/catalog?category=cakes" className="hover:text-rose-600 transition">
-                🎂 Gourmet Cakes
-              </Link>
-              <Link href="/catalog?category=combos" className="hover:text-rose-600 transition">
-                🎁 Combos & Hampers
-              </Link>
-              <Link href="/catalog?occasion=birthday" className="hover:text-rose-600 transition">
-                🎉 Birthday Special
-              </Link>
-              <Link href="/catalog?occasion=anniversary" className="hover:text-rose-600 transition">
-                💍 Anniversary
-              </Link>
-              <Link href="/catalog?occasion=love-and-romance" className="hover:text-rose-600 transition">
-                ❤️ Romance & Midnight
-              </Link>
-            </div>
-            <div className="flex items-center gap-4 text-zinc-500">
-              <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                Same-Day Delivery Active
-              </span>
-            </div>
-          </div>
+        {/* Desktop Mega Menu Bar */}
+        <nav className="hidden lg:block border-t border-rose-100/60 bg-white px-4">
+          <MegaMenu />
         </nav>
 
-        {/* Mobile dropdown */}
+        {/* Mobile slide-out / dropdown menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-zinc-200 bg-white p-4 space-y-3">
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                setIsPincodeModalOpen(true);
-              }}
-              className="flex w-full items-center justify-between rounded-lg bg-rose-50 p-2.5 text-xs text-rose-900 font-semibold"
-            >
-              <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-rose-600" />
-                <span>Deliver To: {location.city} ({location.pincode})</span>
-              </div>
-              <span className="text-rose-600 underline">Change</span>
-            </button>
-            <div className="grid grid-cols-2 gap-2 text-xs font-medium">
-              <Link
-                href="/catalog?category=flowers"
-                className="rounded-lg border p-2 hover:bg-zinc-50"
-                onClick={() => setMobileMenuOpen(false)}
+          <div className="lg:hidden border-t border-zinc-200 bg-white max-h-[85vh] overflow-y-auto divide-y divide-zinc-100">
+            {/* Mobile Pincode bar */}
+            <div className="p-3 bg-rose-50/60">
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setIsPincodeModalOpen(true);
+                }}
+                className="flex w-full items-center justify-between rounded-lg border border-rose-200 bg-white p-2.5 text-xs text-rose-950 font-semibold shadow-xs"
               >
-                🌹 Fresh Flowers
-              </Link>
-              <Link
-                href="/catalog?category=cakes"
-                className="rounded-lg border p-2 hover:bg-zinc-50"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                🎂 Gourmet Cakes
-              </Link>
-              <Link
-                href="/catalog?category=combos"
-                className="rounded-lg border p-2 hover:bg-zinc-50"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                🎁 Combos
-              </Link>
-              <Link
-                href="/catalog?occasion=birthday"
-                className="rounded-lg border p-2 hover:bg-zinc-50"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                🎉 Birthday Special
-              </Link>
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-rose-600" />
+                  <span>Deliver To: {location.city} ({location.pincode})</span>
+                </div>
+                <span className="text-rose-600 text-xs font-bold underline">Change</span>
+              </button>
             </div>
-            <div className="pt-2 border-t flex justify-between text-xs text-zinc-600">
-              <Link href="/vendor" onClick={() => setMobileMenuOpen(false)}>Vendor Portal</Link>
-              <Link href="/admin" onClick={() => setMobileMenuOpen(false)}>Admin Panel</Link>
+
+            {/* Mobile Search Input */}
+            <div className="p-3">
+              <SearchBar />
+            </div>
+
+            {/* Mega Menu Categories Accordion */}
+            <div className="py-2">
+              <div className="px-4 py-1 text-[11px] font-bold uppercase tracking-wider text-zinc-400">
+                Shop by Department
+              </div>
+              <div className="divide-y divide-zinc-100">
+                {MEGA_MENU_CATEGORIES.map((cat) => {
+                  const isExpanded = expandedMobileCat === cat.id;
+                  return (
+                    <div key={cat.id} className="text-xs">
+                      <button
+                        onClick={() =>
+                          setExpandedMobileCat(isExpanded ? null : cat.id)
+                        }
+                        className={`w-full flex items-center justify-between px-4 py-3 font-semibold transition ${
+                          isExpanded
+                            ? "bg-rose-50/60 text-rose-900"
+                            : "text-zinc-800 hover:bg-zinc-50"
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <span>{cat.label}</span>
+                          {cat.badge && (
+                            <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-rose-100 text-rose-800 uppercase">
+                              {cat.badge}
+                            </span>
+                          )}
+                        </div>
+                        <ChevronDown
+                          className={`h-4 w-4 text-zinc-400 transition-transform ${
+                            isExpanded ? "rotate-180 text-rose-600" : ""
+                          }`}
+                        />
+                      </button>
+
+                      {isExpanded && (
+                        <div className="bg-zinc-50/80 px-4 py-3 space-y-4">
+                          <Link
+                            href={cat.href}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="inline-flex items-center gap-1.5 text-xs font-bold text-rose-600 hover:underline"
+                          >
+                            <span>Explore All {cat.label}</span>
+                            <span>&rarr;</span>
+                          </Link>
+
+                          <div className="grid grid-cols-2 gap-4">
+                            {cat.columns.map((col, colIdx) => (
+                              <div key={colIdx} className="space-y-1.5">
+                                <div className="text-[10px] font-bold uppercase text-zinc-500 tracking-wider">
+                                  {col.title}
+                                </div>
+                                <ul className="space-y-1">
+                                  {col.links.slice(0, 4).map((link, lIdx) => (
+                                    <li key={lIdx}>
+                                      <Link
+                                        href={link.href}
+                                        onClick={() => setMobileMenuOpen(false)}
+                                        className="text-zinc-700 hover:text-rose-600 block py-0.5 text-xs"
+                                      >
+                                        {link.label}
+                                      </Link>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Quick Portals & Authentication in Mobile */}
+            <div className="p-4 space-y-2 bg-zinc-50/50 text-xs">
+              {currentUser ? (
+                <div className="flex items-center justify-between pb-2 border-b border-zinc-200">
+                  <Link
+                    href="/account"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-2 font-semibold text-zinc-900"
+                  >
+                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-rose-600 text-white font-bold">
+                      {currentUser.name.charAt(0)}
+                    </div>
+                    <span>{currentUser.name}</span>
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="text-xs text-red-600 font-semibold hover:underline"
+                  >
+                    Log Out
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  href="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-rose-600 py-2.5 font-bold text-white shadow-xs"
+                >
+                  <User className="h-4 w-4" />
+                  <span>Sign In or Register</span>
+                </Link>
+              )}
+
+              <div className="flex justify-between pt-2 text-zinc-600 font-medium">
+                <Link
+                  href="/vendor"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-1 hover:text-rose-600"
+                >
+                  <Store className="h-3.5 w-3.5" />
+                  <span>Vendor Portal</span>
+                </Link>
+                <Link
+                  href="/admin"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-1 hover:text-rose-600"
+                >
+                  <ShieldCheck className="h-3.5 w-3.5" />
+                  <span>Admin Console</span>
+                </Link>
+              </div>
             </div>
           </div>
         )}
