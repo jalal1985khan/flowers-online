@@ -403,6 +403,7 @@ export const MEGA_MENU_CATEGORIES: MegaMenuCategory[] = [
       {
         title: "Delivery By City",
         links: [
+          { label: "Guwahati (Assam Hub)", href: "/city/guwahati", isHot: true },
           { label: "Delhi NCR (Gurugram, Noida)", href: "/city/delhi", isHot: true },
           { label: "Mumbai & Navi Mumbai", href: "/city/mumbai", isHot: true },
           { label: "Bengaluru (Bangalore)", href: "/city/bengaluru", isHot: true },

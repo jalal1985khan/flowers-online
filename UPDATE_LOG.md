@@ -9,6 +9,21 @@
 
 ## Release & Enhancement History
 
+### [v1.5.0] – 2026-09-25: Guwahati City Hub Landing Page & SEO Localized Gifting
+- **Category:** Hyperlocal SEO & Gifting Marketplace Expansion
+- **Enhancements:**
+  - Implemented comprehensive dedicated landing page for Guwahati (`/city/guwahati`) adapting copy and internal links:
+    - **Header & Value Proposition:** "Online Flowers, Cake & Plant Delivery in Guwahati" with same-day and midnight 11 PM - 12 AM badges.
+    - **Cake Delivery Showcase:** Dedicated section highlighting birthdays, anniversaries, kids' bakes, weddings, bento cakes, and 100% pure vegetarian (eggless) options.
+    - **40+ Localities Coverage Grid:** Real-time coverage display for Paltan Bazaar, G S Road, Zoo Road, Six Mile, Ganeshguri, Ulubari, Beltola, Dispur, Christian Basti, Rukminigaon, Hatigaon, Bhangagarh, Chandmari, Silpukhuri, Maligaon, Jalukbari, Basistha, Lokhra, Narengi, etc., with instant WhatsApp chat trigger.
+    - **Spotlight Modules:** Birthday Cakes, Anniversary Cakes, Korean Bento Cakes, Fresh Flowers (Roses, Orchids, Lilies, Gerberas, Carnations), Cake & Flower Combos, and Valentine's Day romance gifts.
+    - **Guwahati FAQ Section & FAQPage Schema:** 6 structured Q&As answering midnight delivery, morning surprise, NRI international orders, and delivery cutoffs.
+    - **Popular Searches Tag Cloud:** 43 high-volume search phrases converted to internal catalog and search links, replacing external competitor domains.
+  - Linked Guwahati to the top of "Delivery By City" in the Storefront Mega Menu (`src/components/storefront/mega-menu.tsx`).
+  - Tested and validated production build (`npm run build` exits `0`).
+
+---
+
 ### [v1.4.1] – 2026-09-25: Image Remote Patterns Configuration Patch
 - **Category:** Configuration & Bugfix
 - **Enhancements:**

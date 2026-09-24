@@ -4,6 +4,34 @@ This document records chronological development sessions, specific user requests
 
 ---
 
+## Session 7: Guwahati City Landing Page, SEO Localities & FAQs
+- **Timestamp:** 2026-09-25 00:18 - 00:22 IST
+- **User Prompt:**
+  - *"need these details also - Online Flowers, Cake & Plant Delivery in Guwahati... but need to change the domain name"*
+- **Actions Taken:**
+  1. Updated `src/app/(storefront)/city/[city]/page.tsx` with dedicated data and sections for Guwahati:
+     - Header, subtitle, and brand narrative.
+     - Value proposition chips: Fresh Cakes, Premium Flowers, Fast Same-Day Delivery, Midnight (11 PM - 12 AM).
+     - Cake delivery showcase (occasions, 8 popular flavors, eggless options, custom photo designs).
+     - 40+ localities coverage grid (Paltan Bazaar, G S Road, Zoo Road, Six Mile, Ganeshguri, Ulubari, Beltola, Dispur, Maligaon, Jalukbari, etc.) with WhatsApp chat CTA.
+     - 3 Spotlight occasion cards (Birthday, Anniversary, Korean Bento Cakes).
+     - Fresh flowers (Roses, Orchids, Lilies, Gerberas, Carnations) and Combos spotlight.
+     - Valentine's Day and special moments promotional banner.
+     - 6 FAQs with Schema.org `FAQPage` structured data.
+     - 43 popular search phrases transformed into internal marketplace links (`/catalog?category=...`, `/catalog?occasion=...`, etc.) removing external domains.
+  2. Added Guwahati (Assam Hub) to the top of "Delivery By City" in `src/components/storefront/mega-menu.tsx`.
+  3. Updated `UPDATE_LOG.md` (v1.5.0) and `SESSION_LOG.md`.
+- **Verification:**
+  - HTTP test: Verified `GET /city/guwahati` returned status 200.
+  - Production build: `npm run build` ran and completed with code `0`.
+- **Files Modified:**
+  - `src/app/(storefront)/city/[city]/page.tsx`
+  - `src/components/storefront/mega-menu.tsx`
+  - `UPDATE_LOG.md`
+  - `SESSION_LOG.md`
+
+---
+
 ## Session 6: Next.js Image Unsplash RemotePatterns Fix
 - **Timestamp:** 2026-09-25 00:13 - 00:15 IST
 - **User Prompt:**
