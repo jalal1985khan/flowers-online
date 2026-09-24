@@ -1,4 +1,5 @@
 import { PrismaClient, ProductType, SlotType, Role } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
@@ -16,6 +17,10 @@ async function main() {
   await prisma.addon.deleteMany();
   await prisma.category.deleteMany();
   await prisma.occasion.deleteMany();
+  await prisma.coupon.deleteMany();
+  await prisma.aIRecommendation.deleteMany();
+  await prisma.customerAddress.deleteMany();
+  await prisma.auditLog.deleteMany();
   await prisma.user.deleteMany();
   await prisma.vendor.deleteMany();
 
@@ -467,10 +472,16 @@ async function main() {
   ]);
 
   console.log("👤 Creating Admin & Vendor Users...");
+  console.log("👤 Creating Admin, Vendor, and Customer Users...");
+  const adminPassword = await bcrypt.hash("Admin@123", 10);
+  const vendorPassword = await bcrypt.hash("Vendor@123", 10);
+  const customerPassword = await bcrypt.hash("Customer@123", 10);
+
   await prisma.user.create({
     data: {
       email: "admin@bloomandbakes.com",
       name: "Super Admin",
+      password: adminPassword,
       role: Role.SUPER_ADMIN,
     },
   });
@@ -479,8 +490,19 @@ async function main() {
     data: {
       email: "vendor@petalsbloom.in",
       name: "Ramesh Florist",
+      password: vendorPassword,
       role: Role.VENDOR_OWNER,
       vendorId: vendorFlorist.id,
+    },
+  });
+
+  await prisma.user.create({
+    data: {
+      email: "customer@example.com",
+      name: "Aakash Sharma",
+      password: customerPassword,
+      phone: "+91 9876543210",
+      role: Role.CUSTOMER,
     },
   });
 
