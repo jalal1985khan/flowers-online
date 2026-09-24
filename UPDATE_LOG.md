@@ -9,6 +9,14 @@
 
 ## Release & Enhancement History
 
+### [v1.5.4] – 2026-09-25: Dynamic Marketplace Brand Name in Footer Copyright
+- **Category:** Brand Customization & Configuration
+- **Enhancements:**
+  - Replaced hardcoded competitor name ("Petalscart") in the footer with dynamic `process.env.NEXT_PUBLIC_APP_NAME || "Bloom & Bakes"`.
+  - Ensures the site seamlessly reflects the user's custom brand name as soon as their domain/brand is finalized without code edits.
+
+---
+
 ### [v1.5.3] – 2026-09-25: Dark Bottom Footer Bar with Delivery Areas & Payment Badges
 - **Category:** Storefront Footer & Brand Identity
 - **Enhancements:**

@@ -152,7 +152,7 @@ export function Footer() {
           {/* Sub-footer bottom row */}
           <div className="pt-4 border-t border-zinc-800/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
             <div className="flex items-center gap-1.5 text-zinc-400">
-              <span>© {new Date().getFullYear()} Petalscart · Delivering Love Across Guwahati</span>
+              <span>© {new Date().getFullYear()} {process.env.NEXT_PUBLIC_APP_NAME || "Bloom & Bakes"} · Delivering Love Across Guwahati</span>
               <span>🌸</span>
             </div>
 

@@ -4,6 +4,24 @@ This document records chronological development sessions, specific user requests
 
 ---
 
+## Session 11: Dynamic Brand Customization in Footer Copyright
+- **Timestamp:** 2026-09-25 00:41 - 00:43 IST
+- **User Prompt:**
+  - *"change this Petalscart · Delivering Love Across Guwahati 🌸 - my domain name is not registered yet"*
+- **Actions Taken:**
+  1. Updated `src/components/storefront/footer.tsx`:
+     - Replaced hardcoded "Petalscart" with dynamic `{process.env.NEXT_PUBLIC_APP_NAME || "Bloom & Bakes"}`.
+     - Automatically renders `Bloom & Bakes · Delivering Love Across Guwahati 🌸` and dynamically reflects the exact brand name once the user updates `NEXT_PUBLIC_APP_NAME` in `.env`.
+  2. Updated `UPDATE_LOG.md` (v1.5.4) and `SESSION_LOG.md`.
+- **Verification:**
+  - Production build: `npm run build` completed with code `0`.
+- **Files Modified:**
+  - `src/components/storefront/footer.tsx`
+  - `UPDATE_LOG.md`
+  - `SESSION_LOG.md`
+
+---
+
 ## Session 10: Dark Bottom Footer Bar with Delivery Areas & Payment Badges
 - **Timestamp:** 2026-09-25 00:40 - 00:42 IST
 - **User Prompt:**
