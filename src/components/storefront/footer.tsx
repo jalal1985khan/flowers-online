@@ -88,10 +88,11 @@ export function Footer() {
               Delivery Cities
             </h4>
             <ul className="space-y-2 text-xs">
-              <li><span className="text-zinc-700">Bengaluru</span> (560001, 560038, 560034)</li>
-              <li><span className="text-zinc-700">Delhi NCR</span> (110001, 110016, 122001)</li>
-              <li><span className="text-zinc-700">Mumbai</span> (400001, 400050)</li>
-              <li><span className="text-zinc-700">Hyderabad & Pune</span> (Coming soon)</li>
+              <li><Link href="/city/guwahati" className="text-rose-600 font-semibold hover:underline">Guwahati (Assam Hub)</Link></li>
+              <li><Link href="/city/delhi" className="text-zinc-700 hover:text-rose-600">Delhi NCR (110001, 110016, 122001)</Link></li>
+              <li><Link href="/city/mumbai" className="text-zinc-700 hover:text-rose-600">Mumbai (400001, 400050)</Link></li>
+              <li><Link href="/city/bengaluru" className="text-zinc-700 hover:text-rose-600">Bengaluru (560001, 560038)</Link></li>
+              <li><span className="text-zinc-500">Hyderabad & Pune (Active)</span></li>
             </ul>
           </div>
 
@@ -106,6 +107,66 @@ export function Footer() {
               <li><a href="#" className="hover:text-rose-600">Midnight Delivery FAQ</a></li>
               <li><a href="#" className="hover:text-rose-600">Privacy & Terms</a></li>
             </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Popular Delivery Areas & Bottom Bar (Screenshot match) */}
+      <div className="bg-[#0b0f19] text-zinc-300 border-t border-zinc-800/80">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 space-y-5">
+          {/* Popular Delivery Areas Pills */}
+          <div className="space-y-3">
+            <h4 className="text-sm font-bold text-white tracking-wide">
+              Popular Delivery Areas
+            </h4>
+            <div className="flex flex-wrap items-center gap-2">
+              {[
+                { name: "Dispur", href: "/city/guwahati" },
+                { name: "Ganeshguri", href: "/city/guwahati" },
+                { name: "Zoo Road", href: "/city/guwahati" },
+                { name: "Beltola", href: "/city/guwahati" },
+                { name: "Six Mile", href: "/city/guwahati" },
+                { name: "Khanapara", href: "/city/guwahati" },
+                { name: "Maligaon", href: "/city/guwahati" },
+                { name: "Chandmari", href: "/city/guwahati" },
+              ].map((area) => (
+                <Link
+                  key={area.name}
+                  href={area.href}
+                  className="rounded-full border border-zinc-700/80 bg-zinc-800/50 hover:bg-zinc-800 hover:border-zinc-500 px-3.5 py-1 text-xs text-zinc-300 hover:text-white transition shadow-2xs"
+                >
+                  {area.name}
+                </Link>
+              ))}
+
+              <Link
+                href="/city/guwahati"
+                className="rounded-full border border-rose-600/90 bg-rose-950/40 hover:bg-rose-600 text-rose-400 hover:text-white font-semibold px-4 py-1 text-xs transition flex items-center gap-1 shadow-2xs"
+              >
+                <span>All Areas</span>
+                <span className="text-xs">&rarr;</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* Sub-footer bottom row */}
+          <div className="pt-4 border-t border-zinc-800/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+            <div className="flex items-center gap-1.5 text-zinc-400">
+              <span>© {new Date().getFullYear()} Petalscart · Delivering Love Across Guwahati</span>
+              <span>🌸</span>
+            </div>
+
+            {/* Payment Method Badges */}
+            <div className="flex items-center gap-2">
+              {["UPI", "Razorpay", "PhonePe", "Visa", "Mastercard"].map((method) => (
+                <span
+                  key={method}
+                  className="rounded bg-zinc-800/80 border border-zinc-700/60 px-2.5 py-0.5 text-[11px] font-semibold text-zinc-300 shadow-2xs"
+                >
+                  {method}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </div>

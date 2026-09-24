@@ -9,6 +9,19 @@
 
 ## Release & Enhancement History
 
+### [v1.5.3] – 2026-09-25: Dark Bottom Footer Bar with Delivery Areas & Payment Badges
+- **Category:** Storefront Footer & Brand Identity
+- **Enhancements:**
+  - Implemented the bottom dark navigation and trust bar in `src/components/storefront/footer.tsx` matching the user's design reference:
+    - **Popular Delivery Areas Pills:** Rounded interactive pill chips for `Dispur`, `Ganeshguri`, `Zoo Road`, `Beltola`, `Six Mile`, `Khanapara`, `Maligaon`, and `Chandmari`.
+    - **"All Areas →" Accent Pill:** Styled with a red/rose outline and hover fill (`border-rose-600 bg-rose-950/40 text-rose-400 hover:bg-rose-600 hover:text-white`) linking directly to the Guwahati city hub.
+    - **Localized Copyright:** `© 2026 Petalscart · Delivering Love Across Guwahati 🌸`.
+    - **Payment Methods Row:** Small trust badges for `UPI`, `Razorpay`, `PhonePe`, `Visa`, and `Mastercard`.
+  - Added Guwahati (Assam Hub) to the "Delivery Cities" column in the main footer.
+  - Verified with `npm run build` (0 errors).
+
+---
+
 ### [v1.5.2] – 2026-09-25: Homepage Guwahati Local Gifting & SEO Showcase Above Footer
 - **Category:** Storefront Homepage & Local SEO Conversion
 - **Enhancements:**
