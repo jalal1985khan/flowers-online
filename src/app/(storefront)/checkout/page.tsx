@@ -21,7 +21,8 @@ import {
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items, subtotal, slotFeesTotal, total, clearCart } = useCart();
+  const { items, subtotal, slotFeesTotal, appliedCoupon, discountTotal, total, clearCart } =
+    useCart();
   const { location } = useLocation();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -77,6 +78,8 @@ export default function CheckoutPage() {
         subtotal,
         slotFee: slotFeesTotal,
         deliveryFee: 0,
+        couponCode: appliedCoupon?.code || null,
+        couponDiscount: discountTotal,
         total,
         paymentMethod,
         items: items.map((i) => ({
@@ -308,6 +311,12 @@ export default function CheckoutPage() {
                   <span>Delivery Charges</span>
                   <span className="text-emerald-700 font-semibold">FREE</span>
                 </div>
+                {appliedCoupon && (
+                  <div className="flex justify-between text-emerald-700 font-semibold bg-emerald-50 px-2 py-1 rounded">
+                    <span>Coupon ({appliedCoupon.code})</span>
+                    <span>- {formatINR(discountTotal)}</span>
+                  </div>
+                )}
                 <div className="border-t border-zinc-100 pt-2 flex justify-between items-baseline font-bold">
                   <span className="text-sm text-zinc-900">Total Payable</span>
                   <span className="text-2xl font-black text-rose-600 font-serif">

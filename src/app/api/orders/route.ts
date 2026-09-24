@@ -104,6 +104,9 @@ export async function POST(request: Request) {
         subtotal: Number(subtotal),
         slotFee: Number(slotFee || 0),
         deliveryFee: Number(deliveryFee || 0),
+        couponCode: body.couponCode || null,
+        couponDiscount: Number(body.couponDiscount || 0),
+        discount: Number(body.couponDiscount || 0),
         total: Number(total),
         status: OrderStatus.PLACED,
         paymentStatus: PaymentStatus.PAID, // Simulated successful payment

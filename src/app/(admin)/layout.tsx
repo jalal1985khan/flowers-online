@@ -34,7 +34,14 @@ export default function AdminLayout({
             </div>
           </div>
 
-          <div className="flex items-center gap-3 text-xs">
+          <div className="flex items-center gap-2 text-xs">
+            <Link
+              href="/admin/growth"
+              className="flex items-center gap-1.5 rounded-lg border border-rose-500/40 bg-rose-950/40 px-3 py-1.5 text-rose-300 hover:bg-rose-900/50 transition font-semibold"
+            >
+              <Sparkles className="h-3.5 w-3.5 text-rose-400" />
+              <span>AI Growth OS</span>
+            </Link>
             <Link
               href="/vendor"
               className="flex items-center gap-1.5 rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-1.5 text-zinc-300 hover:bg-zinc-800 transition"

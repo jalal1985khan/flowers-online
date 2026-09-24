@@ -503,6 +503,80 @@ async function main() {
     },
   });
 
+  console.log("🎟️ Creating Initial Coupons...");
+  await prisma.coupon.createMany({
+    data: [
+      {
+        code: "FIRSTBLOOM",
+        description: "15% off your first celebration order",
+        discountType: "PERCENTAGE",
+        discountValue: 15,
+        minOrderValue: 499,
+        maxDiscount: 250,
+        isActive: true,
+      },
+      {
+        code: "MIDNIGHT50",
+        description: "Flat ₹50 off on midnight deliveries",
+        discountType: "FLAT",
+        discountValue: 50,
+        minOrderValue: 699,
+        isActive: true,
+      },
+      {
+        code: "FESTIVE200",
+        description: "Flat ₹200 off on luxury bouquets & cake hampers",
+        discountType: "FLAT",
+        discountValue: 200,
+        minOrderValue: 1499,
+        isActive: true,
+      },
+    ],
+  });
+
+  console.log("🧠 Creating Initial AI Recommendations...");
+  await prisma.aIRecommendation.createMany({
+    data: [
+      {
+        category: "SEO",
+        title: "Dynamic Landing Pages for 'Flowers & Cakes Delivery Whitefield'",
+        description: "Identified high organic search intent for Whitefield (560066). Proposes generating a targeted localized landing page with relevant local vendor inventory.",
+        impactScore: 92,
+        status: "PROPOSED",
+        payload: {
+          targetCity: "Bengaluru",
+          targetPincode: "560066",
+          proposedSlug: "/flowers-cakes-delivery-whitefield",
+          estimatedMonthlyClicks: 1450,
+        },
+      },
+      {
+        category: "CATALOG",
+        title: "Occasion Bundle: Valentine & Rose Day Pre-Orders",
+        description: "Historical demand peaks require pre-packaging 20 Dutch Roses with Red Velvet Heart Cake. Auto-generated SKU concept ready for review.",
+        impactScore: 88,
+        status: "APPROVED",
+        payload: {
+          comboTitle: "Scarlet Romance Luxury Pairing",
+          suggestedPrice: 1599,
+          margin: 32,
+        },
+      },
+      {
+        category: "PRICING",
+        title: "Midnight Slot Dynamic Surcharge Adjustment",
+        description: "Demand between 11 PM - 12 AM is running at 94% rider capacity. Suggesting surge pricing increase of ₹50 to balance driver incentives.",
+        impactScore: 78,
+        status: "PROPOSED",
+        payload: {
+          currentSurcharge: 250,
+          proposedSurcharge: 300,
+          driverIncentiveShare: 80,
+        },
+      },
+    ],
+  });
+
   console.log("✅ Seed completed successfully!");
 }
 

@@ -29,6 +29,12 @@ export interface CartItem {
   addons?: CartAddon[];
 }
 
+export interface AppliedCoupon {
+  code: string;
+  discount: number;
+  description: string;
+}
+
 interface CartContextType {
   items: CartItem[];
   addItem: (item: Omit<CartItem, "id">) => void;
@@ -38,19 +44,28 @@ interface CartContextType {
   itemCount: number;
   subtotal: number;
   slotFeesTotal: number;
+  appliedCoupon: AppliedCoupon | null;
+  discountTotal: number;
   total: number;
+  applyCoupon: (code: string) => Promise<{ success: boolean; message?: string }>;
+  removeCoupon: () => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [appliedCoupon, setAppliedCoupon] = useState<AppliedCoupon | null>(null);
 
   useEffect(() => {
     try {
       const saved = localStorage.getItem("bloom_cart");
       if (saved) {
         setItems(JSON.parse(saved));
+      }
+      const savedCoupon = localStorage.getItem("bloom_coupon");
+      if (savedCoupon) {
+        setAppliedCoupon(JSON.parse(savedCoupon));
       }
     } catch {
       // ignore
@@ -90,6 +105,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const clearCart = () => {
     saveItems([]);
+    removeCoupon();
   };
 
   const itemCount = items.reduce((acc, item) => acc + item.quantity, 0);
@@ -108,7 +124,41 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     0
   );
 
-  const total = subtotal + slotFeesTotal;
+  const discountTotal = appliedCoupon ? Math.min(appliedCoupon.discount, subtotal) : 0;
+  const total = Math.max(0, subtotal + slotFeesTotal - discountTotal);
+
+  const applyCoupon = async (code: string) => {
+    try {
+      const res = await fetch("/api/coupons/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code, subtotal }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.valid) {
+        return { success: false, message: data.message || "Invalid coupon" };
+      }
+      const couponObj: AppliedCoupon = {
+        code: data.code,
+        discount: data.discount,
+        description: data.description,
+      };
+      setAppliedCoupon(couponObj);
+      localStorage.setItem("bloom_coupon", JSON.stringify(couponObj));
+      return { success: true };
+    } catch (e: any) {
+      return { success: false, message: e.message || "Failed to validate coupon" };
+    }
+  };
+
+  const removeCoupon = () => {
+    setAppliedCoupon(null);
+    try {
+      localStorage.removeItem("bloom_coupon");
+    } catch {
+      // ignore
+    }
+  };
 
   return (
     <CartContext.Provider
@@ -121,7 +171,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         itemCount,
         subtotal,
         slotFeesTotal,
+        appliedCoupon,
+        discountTotal,
         total,
+        applyCoupon,
+        removeCoupon,
       }}
     >
       {children}

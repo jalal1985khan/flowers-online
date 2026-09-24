@@ -18,8 +18,36 @@ import {
 } from "lucide-react";
 
 export default function CartPage() {
-  const { items, removeItem, updateQuantity, itemCount, subtotal, slotFeesTotal, total } =
-    useCart();
+  const {
+    items,
+    removeItem,
+    updateQuantity,
+    itemCount,
+    subtotal,
+    slotFeesTotal,
+    appliedCoupon,
+    discountTotal,
+    total,
+    applyCoupon,
+    removeCoupon,
+  } = useCart();
+
+  const [couponInput, setCouponInput] = React.useState("");
+  const [couponError, setCouponError] = React.useState<string | null>(null);
+  const [isApplyingCoupon, setIsApplyingCoupon] = React.useState(false);
+
+  const handleApplyCoupon = async () => {
+    if (!couponInput.trim()) return;
+    setIsApplyingCoupon(true);
+    setCouponError(null);
+    const res = await applyCoupon(couponInput.trim());
+    setIsApplyingCoupon(false);
+    if (!res.success) {
+      setCouponError(res.message || "Failed to apply coupon");
+    } else {
+      setCouponInput("");
+    }
+  };
 
   if (items.length === 0) {
     return (
@@ -183,10 +211,66 @@ export default function CartPage() {
                 <span>Standard Delivery Fee</span>
                 <span className="text-emerald-700 font-bold">FREE</span>
               </div>
+              {appliedCoupon && (
+                <div className="flex justify-between text-emerald-700 font-semibold bg-emerald-50 px-2 py-1 rounded">
+                  <span>Coupon Discount ({appliedCoupon.code})</span>
+                  <span>- {formatINR(discountTotal)}</span>
+                </div>
+              )}
               <div className="flex justify-between text-zinc-600">
                 <span>Estimated Taxes (GST)</span>
                 <span className="text-zinc-500">Included</span>
               </div>
+            </div>
+
+            {/* Coupon Code Section */}
+            <div className="border-t border-zinc-100 pt-3">
+              {appliedCoupon ? (
+                <div className="flex items-center justify-between rounded-xl bg-emerald-50 border border-emerald-200 p-2.5 text-xs">
+                  <div>
+                    <div className="font-bold text-emerald-900 flex items-center gap-1">
+                      <span>🏷️ {appliedCoupon.code}</span>
+                      <span className="text-[10px] text-emerald-700 font-normal">Applied</span>
+                    </div>
+                    <div className="text-[11px] text-emerald-700">{appliedCoupon.description}</div>
+                  </div>
+                  <button
+                    onClick={removeCoupon}
+                    className="text-xs font-bold text-red-600 hover:underline cursor-pointer"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Enter Coupon (e.g. FIRSTBLOOM)"
+                      value={couponInput}
+                      onChange={(e) => {
+                        setCouponInput(e.target.value.toUpperCase());
+                        setCouponError(null);
+                      }}
+                      className="flex-1 rounded-lg border border-zinc-200 px-3 py-1.5 text-xs uppercase font-medium placeholder:normal-case focus:outline-none focus:ring-1 focus:ring-rose-500"
+                    />
+                    <Button
+                      size="sm"
+                      disabled={isApplyingCoupon || !couponInput.trim()}
+                      onClick={handleApplyCoupon}
+                      className="px-3"
+                    >
+                      {isApplyingCoupon ? "..." : "Apply"}
+                    </Button>
+                  </div>
+                  {couponError && (
+                    <p className="text-[11px] text-red-600 font-medium">{couponError}</p>
+                  )}
+                  <div className="text-[10px] text-zinc-400">
+                    Try <button onClick={() => setCouponInput("FIRSTBLOOM")} className="font-bold text-rose-600 underline">FIRSTBLOOM</button> or <button onClick={() => setCouponInput("MIDNIGHT50")} className="font-bold text-rose-600 underline">MIDNIGHT50</button>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="border-t border-zinc-100 pt-3 flex justify-between items-baseline">

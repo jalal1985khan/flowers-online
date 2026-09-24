@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useLocation } from "@/lib/location-context";
 import { useCart } from "@/lib/cart-context";
 import { PincodeModal } from "./pincode-modal";
+import { SearchBar } from "./search-bar";
 import {
   MapPin,
   ShoppingBag,
@@ -15,6 +16,7 @@ import {
   X,
   Store,
   ShieldCheck,
+  User,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -66,13 +68,8 @@ export function Header() {
           </button>
 
           {/* Search bar */}
-          <div className="hidden lg:flex flex-1 max-w-md relative">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400" />
-            <input
-              type="text"
-              placeholder="Search roses, truffle cake, birthday combos..."
-              className="w-full rounded-full border border-zinc-200 bg-zinc-50/70 pl-9 pr-4 py-2 text-xs text-zinc-900 placeholder:text-zinc-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition"
-            />
+          <div className="hidden lg:flex flex-1 max-w-md">
+            <SearchBar />
           </div>
 
           {/* Actions */}
@@ -94,6 +91,15 @@ export function Header() {
                 <span>Admin</span>
               </Link>
             </div>
+
+            {/* Account link */}
+            <Link
+              href="/account"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-full border border-zinc-200 bg-white hover:bg-zinc-50 text-xs font-semibold text-zinc-700 transition"
+            >
+              <User className="h-3.5 w-3.5 text-zinc-500" />
+              <span>Account</span>
+            </Link>
 
             {/* Cart link */}
             <Link href="/cart">
