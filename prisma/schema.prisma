@@ -1,0 +1,297 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  CUSTOMER
+  VENDOR_OWNER
+  VENDOR_STAFF
+  OPERATIONS
+  SUPER_ADMIN
+}
+
+enum ProductType {
+  FLOWERS
+  CAKES
+  COMBOS
+  GIFTS
+  ADDONS
+}
+
+enum SlotType {
+  STANDARD
+  FIXED_TIME
+  MIDNIGHT
+  EXPRESS_2HR
+}
+
+enum OrderStatus {
+  PLACED
+  ACCEPTED
+  PREPARING
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  phone     String?
+  password  String?
+  role      Role     @default(CUSTOMER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  vendorId  String?
+  vendor    Vendor?  @relation(fields: [vendorId], references: [id])
+  orders    Order[]
+}
+
+model Vendor {
+  id                String              @id @default(cuid())
+  name              String
+  slug              String              @unique
+  email             String              @unique
+  phone             String
+  city              String
+  state             String
+  address           String
+  isApproved        Boolean             @default(false)
+  isActive          Boolean             @default(true)
+  commissionRate    Float               @default(15.0) // 15% marketplace commission
+  prepTimeMinutes   Int                 @default(60)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+
+  users             User[]
+  serviceAreas      VendorServiceArea[]
+  products          Product[]
+  orderItems        OrderItem[]
+}
+
+model VendorServiceArea {
+  id                  String   @id @default(cuid())
+  vendorId            String
+  vendor              Vendor   @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  pincode             String
+  city                String
+  minOrderValue       Float    @default(0)
+  deliveryFee         Float    @default(0)
+  isSameDaySupported  Boolean  @default(true)
+  isMidnightSupported Boolean  @default(true)
+  isFixedTimeSupported Boolean @default(true)
+
+  @@unique([vendorId, pincode])
+  @@index([pincode])
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  image       String?
+  sortOrder   Int       @default(0)
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  products    Product[]
+}
+
+model Occasion {
+  id          String            @id @default(cuid())
+  name        String
+  slug        String            @unique
+  description String?
+  bannerImage String?
+  sortOrder   Int               @default(0)
+  isActive    Boolean           @default(true)
+  createdAt   DateTime          @default(now())
+  products    ProductOccasion[]
+}
+
+model Product {
+  id                      String            @id @default(cuid())
+  vendorId                String
+  vendor                  Vendor            @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  title                   String
+  slug                    String            @unique
+  description             String
+  productType             ProductType
+  categoryId              String
+  category                Category          @relation(fields: [categoryId], references: [id])
+  basePrice               Float
+  compareAtPrice          Float?
+  images                  String[]
+  isAvailable             Boolean           @default(true)
+  isApproved              Boolean           @default(true)
+  isEgglessAvailable      Boolean           @default(false)
+  isCustomMessageSupported Boolean          @default(false)
+  isPhotoCake             Boolean           @default(false)
+  prepTimeMinutes         Int               @default(60)
+  tags                    String[]
+  metaTitle               String?
+  metaDescription         String?
+  createdAt               DateTime          @default(now())
+  updatedAt               DateTime          @updatedAt
+
+  variants                ProductVariant[]
+  occasions               ProductOccasion[]
+  orderItems              OrderItem[]
+  reviews                 Review[]
+
+  @@index([categoryId])
+  @@index([productType])
+}
+
+model ProductVariant {
+  id             String      @id @default(cuid())
+  productId      String
+  product        Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name           String      // e.g. "0.5 kg", "1 kg", "12 Red Roses", "24 Red Roses"
+  sku            String?
+  price          Float
+  compareAtPrice Float?
+  isDefault      Boolean     @default(false)
+  stock          Int         @default(100)
+  orderItems     OrderItem[]
+}
+
+model ProductOccasion {
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  occasionId String
+  occasion   Occasion @relation(fields: [occasionId], references: [id], onDelete: Cascade)
+
+  @@id([productId, occasionId])
+}
+
+model Addon {
+  id          String   @id @default(cuid())
+  title       String
+  category    String   // Candles, Cards, Chocolates, Soft Toys
+  price       Float
+  image       String
+  isAvailable Boolean  @default(true)
+  createdAt   DateTime @default(now())
+}
+
+model DeliverySlot {
+  id                 String   @id @default(cuid())
+  title              String   // e.g. "Morning Slot (9 AM - 1 PM)", "Midnight Slot (11 PM - 11:59 PM)"
+  slotType           SlotType @default(STANDARD)
+  startTime          String   // "09:00"
+  endTime            String   // "13:00"
+  surcharge          Float    @default(0) // Midnight surcharge e.g. ₹200
+  cutoffMinutesBefore Int     @default(120) // e.g. 2 hours before start
+  isActive           Boolean  @default(true)
+  sortOrder          Int      @default(0)
+  orders             Order[]
+}
+
+model Order {
+  id                  String        @id @default(cuid())
+  orderNumber         String        @unique
+  customerId          String?
+  customer            User?         @relation(fields: [customerId], references: [id])
+  customerName        String
+  customerEmail       String
+  customerPhone       String
+
+  recipientName       String
+  recipientPhone      String
+  deliveryAddress     String
+  deliveryCity        String
+  deliveryPincode     String
+  landmark            String?
+  deliveryInstructions String?
+
+  deliveryDate        DateTime
+  deliverySlotId      String
+  deliverySlot        DeliverySlot  @relation(fields: [deliverySlotId], references: [id])
+
+  messageOnCard       String?
+  messageOnCake       String?
+  isEggless           Boolean       @default(false)
+
+  subtotal            Float
+  slotFee             Float         @default(0)
+  deliveryFee         Float         @default(0)
+  discount            Float         @default(0)
+  total               Float
+
+  status              OrderStatus   @default(PLACED)
+  paymentStatus       PaymentStatus @default(PENDING)
+  paymentMethod       String?
+  paymentId           String?
+
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  items               OrderItem[]
+  events              OrderEvent[]
+  reviews             Review[]
+
+  @@index([orderNumber])
+  @@index([deliveryPincode])
+  @@index([status])
+}
+
+model OrderItem {
+  id                String          @id @default(cuid())
+  orderId           String
+  order             Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  vendorId          String
+  vendor            Vendor          @relation(fields: [vendorId], references: [id])
+  productId         String
+  product           Product         @relation(fields: [productId], references: [id])
+  variantId         String?
+  variant           ProductVariant? @relation(fields: [variantId], references: [id])
+  title             String
+  variantName       String?
+  quantity          Int
+  unitPrice         Float
+  totalPrice        Float
+  customCakeMessage String?
+  isEggless         Boolean         @default(false)
+}
+
+model OrderEvent {
+  id        String      @id @default(cuid())
+  orderId   String
+  order     Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  status    OrderStatus
+  note      String?
+  actorRole String      @default("SYSTEM") // SYSTEM, VENDOR, ADMIN, CUSTOMER
+  createdAt DateTime    @default(now())
+
+  @@index([orderId])
+}
+
+model Review {
+  id           String   @id @default(cuid())
+  productId    String
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  orderId      String?
+  order        Order?   @relation(fields: [orderId], references: [id])
+  customerName String
+  rating       Int      @default(5)
+  comment      String
+  isVerified   Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  @@index([productId])
+}
