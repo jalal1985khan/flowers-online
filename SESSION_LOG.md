@@ -4,6 +4,26 @@ This document records chronological development sessions, specific user requests
 
 ---
 
+## Session 6: Next.js Image Unsplash RemotePatterns Fix
+- **Timestamp:** 2026-09-25 00:13 - 00:15 IST
+- **User Prompt:**
+  - Runtime Error: `Invalid src prop on next/image, hostname images.unsplash.com is not configured under images in your next.config.js`
+- **Actions Taken:**
+  1. Configured `images.remotePatterns` in `next.config.ts` allowing:
+     - `images.unsplash.com`
+     - `plus.unsplash.com`
+     - `**.unsplash.com`
+     - `**.supabase.co`
+  2. Restarted Next.js Turbopack development server.
+  3. Verified both runtime rendering (`GET / 200`) and production build (`npm run build 0`).
+  4. Updated `UPDATE_LOG.md` (v1.4.1) and `SESSION_LOG.md`.
+- **Files Modified:**
+  - `next.config.ts`
+  - `UPDATE_LOG.md`
+  - `SESSION_LOG.md`
+
+---
+
 ## Session 5: FNP-Style Full-Width Mega Menu & Mobile Navigation
 - **Timestamp:** 2026-09-25 00:08 - 00:11 IST
 - **User Prompt:**

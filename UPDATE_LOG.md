@@ -9,6 +9,15 @@
 
 ## Release & Enhancement History
 
+### [v1.4.1] – 2026-09-25: Image Remote Patterns Configuration Patch
+- **Category:** Configuration & Bugfix
+- **Enhancements:**
+  - Configured `images.remotePatterns` in `next.config.ts` to allow Unsplash (`images.unsplash.com`, `plus.unsplash.com`, `**.unsplash.com`) and Supabase storage (`**.supabase.co`).
+  - Resolved Next.js runtime error `Invalid src prop on next/image, hostname images.unsplash.com is not configured`.
+  - Restarted Turbopack development server and validated production build.
+
+---
+
 ### [v1.4.0] – 2026-09-25: FNP-Style Full-Width Mega Menu & Mobile Drawer
 - **Category:** Storefront UX & Conversion Navigation
 - **Enhancements:**
