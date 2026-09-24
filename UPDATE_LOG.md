@@ -9,6 +9,21 @@
 
 ## Release & Enhancement History
 
+### [v1.5.5] – 2026-09-25: Official SVG Brand Icons for Footer Payment Badges
+- **Category:** Storefront Footer & Trust UI
+- **Enhancements:**
+  - Created dedicated vector payment badges component (`src/components/storefront/payment-badges.tsx`) with crisp, authentic brand logos:
+    - **UPI:** Dual-chevron arrows in NPCI green (`#22c55e`) and orange (`#f97316`).
+    - **Razorpay:** Stylized cyan-blue angular lightning badge (`#3395FF`).
+    - **PhonePe:** Brand purple badge (`#5F259F`) with white Devanagari "Pe" motif.
+    - **Visa:** Slanted italic bold typography in classic card blue (`#2563eb`).
+    - **Mastercard:** Iconic overlapping red (`#EB001B`) and golden amber (`#F79E1B`) intersecting circles.
+  - Replaced plain text pills in `src/components/storefront/footer.tsx` with `<PaymentBadges />` for enhanced checkout credibility and visual fidelity.
+  - Zero external image CDN dependency; rendered via high-performance inline SVGs.
+  - Fully tested and verified with `npm run build` (25/25 routes static/dynamic compiled successfully).
+
+---
+
 ### [v1.5.4] – 2026-09-25: Dynamic Marketplace Brand Name in Footer Copyright
 - **Category:** Brand Customization & Configuration
 - **Enhancements:**

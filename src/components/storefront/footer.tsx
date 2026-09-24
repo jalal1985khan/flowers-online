@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { Sparkles, ShieldCheck, Clock, Award, Heart } from "lucide-react";
+import { PaymentBadges } from "./payment-badges";
 
 export function Footer() {
   return (
@@ -156,17 +157,8 @@ export function Footer() {
               <span>🌸</span>
             </div>
 
-            {/* Payment Method Badges */}
-            <div className="flex items-center gap-2">
-              {["UPI", "Razorpay", "PhonePe", "Visa", "Mastercard"].map((method) => (
-                <span
-                  key={method}
-                  className="rounded bg-zinc-800/80 border border-zinc-700/60 px-2.5 py-0.5 text-[11px] font-semibold text-zinc-300 shadow-2xs"
-                >
-                  {method}
-                </span>
-              ))}
-            </div>
+            {/* Payment Method Badges with Official Brand Icons */}
+            <PaymentBadges />
           </div>
         </div>
       </div>
