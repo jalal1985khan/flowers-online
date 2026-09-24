@@ -9,6 +9,24 @@
 
 ## Release & Enhancement History
 
+### [v1.5.2] – 2026-09-25: Homepage Guwahati Local Gifting & SEO Showcase Above Footer
+- **Category:** Storefront Homepage & Local SEO Conversion
+- **Enhancements:**
+  - Implemented and embedded `<GuwahatiSEOSection />` directly above the footer on the marketplace homepage (`src/app/(storefront)/page.tsx`).
+  - Integrated rich city gifting narrative with internal domain routes:
+    - **Header & Badges:** "Online Flowers, Cake & Plant Delivery in Guwahati", Fresh Cakes, Premium Flowers, Fast Same-Day Delivery, Midnight (11 PM - 12 AM).
+    - **Cake Delivery Showcase:** Detailed occasions, 8 popular flavors (Truffle, Black Forest, Pineapple, Butterscotch, Red Velvet, Fruit, Cheesecake, Bento), custom designs, and 100% pure vegetarian (eggless) options.
+    - **Coverage Grid (40+ Localities):** Paltan Bazaar, G S Road, Zoo Road, Six Mile, Ganeshguri, Ulubari, Beltola, Dispur, Christian Basti, Rukminigaon, Hatigaon, Bhangagarh, Chandmari, Silpukhuri, Maligaon, Jalukbari, Basistha, Lokhra, Narengi, etc., with WhatsApp chat trigger.
+    - **Spotlight Cards:** Birthday Cakes, Anniversary Cakes, Bento Korean mini cakes.
+    - **Bouquets & Combos:** Sensational Roses, Orchids, Lilies, Gerberas, Carnations, and Cake & Flower combo pairings.
+    - **Occasions & Valentine's:** Love & Romance seasonal banner.
+    - **Why Loved in Guwahati:** 4-card trust badges and customer guarantee.
+    - **Frequently Asked Questions (FAQ):** 6 questions covering midnight delivery, same-day delivery, covered areas, and NRI orders.
+    - **Popular Searches Tag Cloud:** 43 high-intent search tags linking to internal catalog pages.
+  - Verified Next.js 16 Turbopack production build with 0 errors.
+
+---
+
 ### [v1.5.1] – 2026-09-25: Server-Side RBAC Layout Route Guards & Auth Isolation
 - **Category:** Security & Route Protection
 - **Enhancements:**

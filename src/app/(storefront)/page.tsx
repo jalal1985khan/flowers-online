@@ -3,6 +3,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { ProductCard } from "@/components/storefront/product-card";
 import { Button } from "@/components/ui/button";
+import { GuwahatiSEOSection } from "@/components/storefront/guwahati-seo-section";
 import {
   Sparkles,
   ArrowRight,
@@ -296,6 +297,9 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      {/* Guwahati SEO & Local Gifting Showcase above Footer */}
+      <GuwahatiSEOSection />
     </div>
   );
 }
