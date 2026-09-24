@@ -9,6 +9,19 @@
 
 ## Release & Enhancement History
 
+### [v1.5.1] – 2026-09-25: Server-Side RBAC Layout Route Guards & Auth Isolation
+- **Category:** Security & Route Protection
+- **Enhancements:**
+  - Enforced strict server-side authentication guards across all portal layouts:
+    - **Admin Console (`/admin`):** Guarded in `AdminLayout` with `getSession()`. Any unauthenticated request or unauthorized non-admin role immediately triggers an HTTP 307 redirect to `/admin/login`.
+    - **Vendor Portal (`/vendor`):** Guarded in `VendorLayout` with `getSession()`. Any unauthenticated request or non-vendor role immediately triggers an HTTP 307 redirect to `/vendor/login`.
+    - **Customer Account (`/account`):** Guarded in `AccountPage` with `getSession()`. Unauthenticated requests immediately redirect to `/login`.
+  - Reorganized login pages into an isolated `(auth)` route group (`src/app/(auth)`) to cleanly separate public authentication forms from guarded layout trees, avoiding redirect loops.
+  - Added authenticated user identity chips and instant **Sign Out buttons** directly in the Super Admin Console and Vendor Portal headers (`AdminLogoutButton`, `VendorLogoutButton`).
+  - Tested with curl: Verified `HTTP 307` redirect to `/admin/login` for unauthenticated visitors, and `HTTP 200` for authenticated sessions with `SUPER_ADMIN` role.
+
+---
+
 ### [v1.5.0] – 2026-09-25: Guwahati City Hub Landing Page & SEO Localized Gifting
 - **Category:** Hyperlocal SEO & Gifting Marketplace Expansion
 - **Enhancements:**

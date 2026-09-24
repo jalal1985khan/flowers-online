@@ -4,6 +4,48 @@ This document records chronological development sessions, specific user requests
 
 ---
 
+## Session 8: Portal Access Control & Server Layout Guards
+- **Timestamp:** 2026-09-25 00:23 - 00:36 IST
+- **User Prompt:**
+  - *"http://localhost:3000/admin - admin panel is showing without login why?"*
+- **Actions Taken:**
+  1. Diagnosed route exposure:
+     - Found `AdminLayout` and `VendorLayout` rendered children without server session validation.
+     - Login routes (`/admin/login`, `/vendor/login`, `/login`) were nested inside their parent layout groups, making top-level layout guards problematic due to potential redirect loops.
+  2. Reorganized Route Groups:
+     - Created isolated `src/app/(auth)` route group for public authentication pages (`/admin/login`, `/vendor/login`, `/login`).
+     - Preserved exact public URLs (`/admin/login`, `/vendor/login`, `/login`).
+  3. Implemented Server-Side Layout Route Guards:
+     - In `src/app/(admin)/layout.tsx`: Checks `getSession()`. If user is unauthenticated or has non-admin role (`SUPER_ADMIN`, `OPERATIONS`), immediately executes `redirect("/admin/login")`.
+     - In `src/app/(vendor)/layout.tsx`: Checks `getSession()`. If user is unauthenticated or not `VENDOR_OWNER`/`VENDOR_STAFF`, immediately executes `redirect("/vendor/login")`.
+     - In `src/app/(storefront)/account/page.tsx`: Checks `getSession()`. If unauthenticated, executes `redirect("/login")`.
+  4. Built Navigation Identity & Sign Out Controls:
+     - Created `src/components/admin/admin-logout-button.tsx` with user badge in Admin header.
+     - Created `src/components/vendor/vendor-logout-button.tsx` with user badge in Vendor header.
+  5. Updated `UPDATE_LOG.md` (v1.5.1) and `SESSION_LOG.md`.
+- **Verification:**
+  - Unauthenticated access tests:
+    - `curl -I http://localhost:3000/admin` $\to$ Returns `HTTP/1.1 307 Temporary Redirect` to `/admin/login`.
+    - `curl -I http://localhost:3000/vendor` $\to$ Returns `HTTP/1.1 307 Temporary Redirect` to `/vendor/login`.
+    - `curl -I http://localhost:3000/account` $\to$ Returns `HTTP/1.1 307 Temporary Redirect` to `/login`.
+  - Authenticated access test:
+    - Authenticated with Super Admin session cookie $\to$ Returns `HTTP/1.1 200 OK`.
+  - Production build: `npm run build` ran and completed with code `0`.
+- **Files Modified / Created:**
+  - `src/app/(admin)/layout.tsx` (modified)
+  - `src/app/(vendor)/layout.tsx` (modified)
+  - `src/app/(storefront)/account/page.tsx` (modified)
+  - `src/app/(auth)/admin/login/page.tsx` (moved)
+  - `src/app/(auth)/vendor/login/page.tsx` (moved)
+  - `src/app/(auth)/login/page.tsx` (moved)
+  - `src/app/(auth)/layout.tsx` (created)
+  - `src/components/admin/admin-logout-button.tsx` (created)
+  - `src/components/vendor/vendor-logout-button.tsx` (created)
+  - `UPDATE_LOG.md` (updated)
+  - `SESSION_LOG.md` (updated)
+
+---
+
 ## Session 7: Guwahati City Landing Page, SEO Localities & FAQs
 - **Timestamp:** 2026-09-25 00:18 - 00:22 IST
 - **User Prompt:**

@@ -2,6 +2,8 @@ import React from "react";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { formatINR } from "@/lib/utils";
+import { getSession } from "@/lib/auth";
+import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   User,
@@ -17,6 +19,11 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function AccountPage() {
+  const session = await getSession();
+  if (!session) {
+    redirect("/login");
+  }
+
   const [orders, addresses] = await Promise.all([
     prisma.order.findMany({
       include: {

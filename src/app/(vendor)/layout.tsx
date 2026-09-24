@@ -1,12 +1,26 @@
 import React from "react";
 import Link from "next/link";
-import { Store, ShoppingBag, ArrowLeft, Layers, DollarSign } from "lucide-react";
+import { redirect } from "next/navigation";
+import { getSession } from "@/lib/auth";
+import { Store, ArrowLeft, UserCheck } from "lucide-react";
+import { VendorLogoutButton } from "@/components/vendor/vendor-logout-button";
 
-export default function VendorLayout({
+export default async function VendorLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getSession();
+
+  if (
+    !session ||
+    (session.role !== "VENDOR_OWNER" &&
+      session.role !== "VENDOR_STAFF" &&
+      session.role !== "SUPER_ADMIN")
+  ) {
+    redirect("/vendor/login");
+  }
+
   return (
     <div className="min-h-screen bg-zinc-50 flex flex-col">
       {/* Vendor Top Bar */}
@@ -35,10 +49,21 @@ export default function VendorLayout({
           </div>
 
           <div className="flex items-center gap-3 text-xs">
+            {/* Active Vendor Identity Badge */}
+            <div className="hidden sm:flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-zinc-700">
+              <UserCheck className="h-3.5 w-3.5 text-rose-600" />
+              <span className="font-semibold text-zinc-900">{session.name}</span>
+              <span className="text-[10px] font-mono uppercase bg-rose-100 text-rose-800 px-1.5 py-0.5 rounded">
+                {session.role}
+              </span>
+            </div>
+
             <span className="rounded-full bg-emerald-50 px-2.5 py-1 font-semibold text-emerald-700 border border-emerald-200 flex items-center gap-1">
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
               Live Order Stream
             </span>
+
+            <VendorLogoutButton />
           </div>
         </div>
       </header>
