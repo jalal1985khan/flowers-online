@@ -14,7 +14,13 @@ export default function VendorLoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fillVendorDemo = () => {
+  const fillGuwahatiVendor = () => {
+    setEmail("guwahati@bloomandbakes.com");
+    setPassword("Vendor@123");
+    setError(null);
+  };
+
+  const fillBengaluruVendor = () => {
     setEmail("vendor@petalsbloom.in");
     setPassword("Vendor@123");
     setError(null);
@@ -62,19 +68,39 @@ export default function VendorLoginPage() {
         </div>
 
         <div className="rounded-3xl border border-zinc-200 bg-white p-6 sm:p-8 shadow-xs space-y-6">
-          {/* Demo Autofill */}
-          <div className="rounded-2xl border border-rose-200 bg-rose-50/50 p-3 flex items-center justify-between text-xs">
-            <div>
-              <span className="font-bold text-rose-900 block">Florist Partner Demo</span>
-              <span className="text-[11px] text-zinc-500">vendor@petalsbloom.in / Vendor@123</span>
+          {/* Demo Autofill Section */}
+          <div className="space-y-2">
+            <p className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider">Quick Demo Login:</p>
+
+            {/* Guwahati Vendor */}
+            <div className="rounded-2xl border border-rose-200 bg-rose-50/60 p-3 flex items-center justify-between text-xs">
+              <div>
+                <span className="font-bold text-rose-900 block">Guwahati Partner (Araz Flora)</span>
+                <span className="text-[11px] text-zinc-500">guwahati@bloomandbakes.com / Vendor@123</span>
+              </div>
+              <button
+                type="button"
+                onClick={fillGuwahatiVendor}
+                className="rounded-lg bg-rose-600 px-2.5 py-1 text-[11px] font-bold text-white hover:bg-rose-700 transition"
+              >
+                Autofill
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={fillVendorDemo}
-              className="rounded-lg bg-rose-600 px-2.5 py-1 text-[11px] font-bold text-white hover:bg-rose-700 transition"
-            >
-              Autofill
-            </button>
+
+            {/* Bengaluru Vendor */}
+            <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-3 flex items-center justify-between text-xs">
+              <div>
+                <span className="font-bold text-zinc-800 block">Bengaluru Florist (Petals & Bloom)</span>
+                <span className="text-[11px] text-zinc-500">vendor@petalsbloom.in / Vendor@123</span>
+              </div>
+              <button
+                type="button"
+                onClick={fillBengaluruVendor}
+                className="rounded-lg bg-zinc-800 px-2.5 py-1 text-[11px] font-bold text-white hover:bg-zinc-900 transition"
+              >
+                Autofill
+              </button>
+            </div>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4">
@@ -124,7 +150,14 @@ export default function VendorLoginPage() {
             </Button>
           </form>
 
-          <div className="pt-4 border-t border-zinc-100 flex justify-between text-xs text-zinc-500">
+          <div className="pt-3 text-center text-xs text-zinc-600">
+            <span>Want to sell your flowers or cakes? </span>
+            <Link href="/vendor/register" className="font-bold text-rose-600 hover:text-rose-700 hover:underline">
+              Apply as Vendor Partner →
+            </Link>
+          </div>
+
+          <div className="pt-3 border-t border-zinc-100 flex justify-between text-xs text-zinc-500">
             <Link href="/" className="hover:text-zinc-900 flex items-center gap-1">
               <ArrowLeft className="h-3.5 w-3.5" />
               <span>Customer Storefront</span>

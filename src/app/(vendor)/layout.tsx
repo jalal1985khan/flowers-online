@@ -4,6 +4,11 @@ import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import { Store, ArrowLeft, UserCheck } from "lucide-react";
 import { VendorLogoutButton } from "@/components/vendor/vendor-logout-button";
+import { VendorNavTabs } from "@/components/vendor/vendor-nav-tabs";
+import {
+  VendorOrderNotifier,
+  VendorSoundControl,
+} from "@/components/vendor/vendor-order-notifier";
 
 export default async function VendorLayout({
   children,
@@ -23,6 +28,9 @@ export default async function VendorLayout({
 
   return (
     <div className="min-h-screen bg-zinc-50 flex flex-col">
+      {/* Live Order Audio & Toast Notifier */}
+      <VendorOrderNotifier />
+
       {/* Vendor Top Bar */}
       <header className="sticky top-0 z-40 border-b border-zinc-200 bg-white px-4 py-3">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
@@ -48,7 +56,7 @@ export default async function VendorLayout({
             </div>
           </div>
 
-          <div className="flex items-center gap-3 text-xs">
+          <div className="flex items-center gap-2.5 text-xs">
             {/* Active Vendor Identity Badge */}
             <div className="hidden sm:flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-zinc-700">
               <UserCheck className="h-3.5 w-3.5 text-rose-600" />
@@ -57,6 +65,9 @@ export default async function VendorLayout({
                 {session.role}
               </span>
             </div>
+
+            {/* Sound Control Toggle & Test Button */}
+            <VendorSoundControl />
 
             <span className="rounded-full bg-emerald-50 px-2.5 py-1 font-semibold text-emerald-700 border border-emerald-200 flex items-center gap-1">
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -67,6 +78,9 @@ export default async function VendorLayout({
           </div>
         </div>
       </header>
+
+      {/* Navigation Sub-bar */}
+      <VendorNavTabs />
 
       <main className="flex-1 mx-auto max-w-7xl w-full px-4 py-8 sm:px-6 lg:px-8">
         {children}

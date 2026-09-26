@@ -1,10 +1,17 @@
 import React from "react";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { ProductCard } from "@/components/storefront/product-card";
+import { getProductImage } from "@/lib/product-images";
 import { Search, Sparkles } from "lucide-react";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Search | MyPetalsCart",
+  robots: { index: false, follow: true },
+};
 
 interface SearchPageProps {
   searchParams: Promise<{
@@ -18,21 +25,21 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
   const products = query
     ? await prisma.product.findMany({
-        where: {
-          isAvailable: true,
-          isApproved: true,
-          OR: [
-            { title: { contains: query, mode: "insensitive" } },
-            { description: { contains: query, mode: "insensitive" } },
-            { tags: { has: query } },
-          ],
-        },
-        include: {
-          category: true,
-          variants: true,
-        },
-        orderBy: { createdAt: "desc" },
-      })
+      where: {
+        isAvailable: true,
+        isApproved: true,
+        OR: [
+          { title: { contains: query, mode: "insensitive" } },
+          { description: { contains: query, mode: "insensitive" } },
+          { tags: { has: query } },
+        ],
+      },
+      include: {
+        category: true,
+        variants: true,
+      },
+      orderBy: { createdAt: "desc" },
+    })
     : [];
 
   return (
@@ -91,7 +98,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
               productType={p.productType}
               basePrice={p.basePrice}
               compareAtPrice={p.compareAtPrice}
-              image={p.images[0] || ""}
+              image={getProductImage(p)}
               categoryName={p.category.name}
               isEgglessAvailable={p.isEgglessAvailable}
               tags={p.tags}

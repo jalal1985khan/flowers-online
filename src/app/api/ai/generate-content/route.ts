@@ -15,8 +15,8 @@ export async function POST(request: Request) {
     // Commercial and emotional copy generation
     const generatedTitle = `Artisan ${title} — Handcrafted ${type === "FLOWERS" ? "Fresh Bouquet" : "Celebration Cake"}`;
     const generatedDescription = `Handcrafted with meticulous dedication for ${occ} moments. Featuring exquisite notes of ${notes}, crafted by verified master bakers and florists. Guaranteed to arrive fresh in our temperature-controlled presentation packaging with complimentary greeting card.`;
-    const metaTitle = `Order ${title} Online — Same Day & Midnight Delivery | Bloom & Bakes`;
-    const metaDescription = `Send fresh handcrafted ${title} with ${notes}. Same-day 2-hour delivery & guaranteed midnight slots across Bengaluru, Mumbai, and Delhi.`;
+    const metaTitle = `Order ${title} Online — Same Day & Midnight Delivery | MyPetalsCart`;
+    const metaDescription = `Send fresh handcrafted ${title} with ${notes}. Same-day 2-hour delivery & guaranteed midnight slots across Guwahati, Bengaluru, Mumbai, and Delhi.`;
     const tags = [
       type.toLowerCase(),
       occ.toLowerCase(),

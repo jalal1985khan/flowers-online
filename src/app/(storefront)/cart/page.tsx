@@ -178,7 +178,7 @@ export default function CartPage() {
                     </button>
                   </div>
 
-                  <span className="text-base font-bold text-zinc-900 font-serif">
+                  <span className="text-base font-bold text-zinc-900 tracking-tight tabular-nums">
                     {formatINR(
                       (item.unitPrice +
                         (item.addons?.reduce((a, b) => a + b.price * b.quantity, 0) || 0)) *
@@ -275,7 +275,7 @@ export default function CartPage() {
 
             <div className="border-t border-zinc-100 pt-3 flex justify-between items-baseline">
               <span className="text-sm font-bold text-zinc-900">Total Payable</span>
-              <span className="text-2xl font-black text-rose-600 font-serif">
+              <span className="text-2xl font-bold text-rose-600 tracking-tight tabular-nums">
                 {formatINR(total)}
               </span>
             </div>

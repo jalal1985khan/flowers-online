@@ -2,8 +2,12 @@ import React from "react";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { PDPInteractive } from "@/components/storefront/pdp-interactive";
+import { ProductImageGallery } from "@/components/storefront/product-image-gallery";
 import { Star, ShieldCheck, Clock, Award, Heart, Sparkles, MapPin } from "lucide-react";
 import type { Metadata } from "next";
+import { getProductImage, getProductImageList } from "@/lib/product-images";
+
+import { getBaseUrl, getSiteName, buildCanonicalUrl, buildBreadcrumbJsonLd } from "@/lib/seo-config";
 
 interface PDPPageProps {
   params: Promise<{
@@ -17,17 +21,36 @@ export async function generateMetadata({ params }: PDPPageProps): Promise<Metada
     where: { slug },
   });
 
+  const siteName = getSiteName();
+
   if (!product) {
-    return { title: "Product Not Found — Bloom & Bakes" };
+    return {
+      title: `Product Not Found — ${siteName}`,
+      robots: { index: false, follow: true },
+    };
   }
 
+  const canonical = buildCanonicalUrl(`/product/${product.slug}`);
+  const title = product.metaTitle || `${product.title} — Same Day Delivery | ${siteName}`;
+  const description = product.metaDescription || product.description.slice(0, 160);
+
   return {
-    title: product.metaTitle || `${product.title} — Same Day Delivery | Bloom & Bakes`,
-    description: product.metaDescription || product.description.slice(0, 160),
+    title,
+    description,
+    alternates: { canonical },
     openGraph: {
       title: product.title,
-      description: product.description.slice(0, 160),
-      images: product.images[0] ? [{ url: product.images[0] }] : [],
+      description,
+      url: canonical,
+      siteName,
+      type: "website",
+      locale: "en_IN",
+      images: [{ url: getProductImage(product), alt: product.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: product.title,
+      description,
     },
   };
 }
@@ -35,7 +58,7 @@ export async function generateMetadata({ params }: PDPPageProps): Promise<Metada
 export default async function ProductDetailPage({ params }: PDPPageProps) {
   const { slug } = await params;
 
-  const [product, deliverySlots, addons] = await Promise.all([
+  const [product, deliverySlots] = await Promise.all([
     prisma.product.findUnique({
       where: { slug },
       include: {
@@ -53,39 +76,81 @@ export default async function ProductDetailPage({ params }: PDPPageProps) {
       where: { isActive: true },
       orderBy: { sortOrder: "asc" },
     }),
-    prisma.addon.findMany({
-      where: { isAvailable: true },
-      take: 4,
-    }),
   ]);
 
   if (!product) {
     notFound();
   }
 
-  // Schema.org Structured Data
-  const jsonLd = {
-    "@context": "https://schema.org",
+  // Approved & available addons: isolated to this product's vendor + global platform addons
+  const addons = await prisma.addon.findMany({
+    where: {
+      isAvailable: true,
+      isApproved: true,
+      OR: [
+        { vendorId: null },
+        ...(product.vendorId ? [{ vendorId: product.vendorId }] : []),
+      ],
+    },
+    orderBy: [
+      { vendorId: "desc" }, // Vendor-specific addons first
+      { price: "asc" },
+    ],
+    take: 6,
+  });
+
+  const displayImages = getProductImageList(product);
+  const verifiedReviews = product.reviews.filter((r) => r.isVerified);
+  const avgRating =
+    verifiedReviews.length > 0
+      ? verifiedReviews.reduce((sum, r) => sum + r.rating, 0) / verifiedReviews.length
+      : null;
+
+  const productUrl = buildCanonicalUrl(`/product/${product.slug}`);
+
+  const productSchema: Record<string, unknown> = {
     "@type": "Product",
     name: product.title,
-    image: product.images,
+    image: displayImages,
     description: product.description,
     sku: product.variants[0]?.sku || product.slug,
+    url: productUrl,
+    brand: {
+      "@type": "Brand",
+      name: getSiteName(),
+    },
     offers: {
       "@type": "Offer",
       priceCurrency: "INR",
       price: product.basePrice,
-      availability: "https://schema.org/InStock",
+      availability: product.isAvailable
+        ? "https://schema.org/InStock"
+        : "https://schema.org/OutOfStock",
+      url: productUrl,
       seller: {
         "@type": "Organization",
         name: product.vendor.name,
       },
     },
-    aggregateRating: {
+  };
+
+  if (verifiedReviews.length > 0 && avgRating !== null) {
+    productSchema.aggregateRating = {
       "@type": "AggregateRating",
-      ratingValue: "4.9",
-      reviewCount: Math.max(product.reviews.length, 12),
-    },
+      ratingValue: avgRating.toFixed(1),
+      reviewCount: verifiedReviews.length,
+    };
+  }
+
+  const breadcrumbSchema = buildBreadcrumbJsonLd([
+    { name: "Home", url: "/" },
+    { name: product.category.name, url: `/catalog?category=${product.category.slug}` },
+    { name: product.title, url: `/product/${product.slug}` },
+  ]);
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [productSchema, breadcrumbSchema],
   };
 
   return (
@@ -99,31 +164,11 @@ export default async function ProductDetailPage({ params }: PDPPageProps) {
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
         {/* Left: Product Images Gallery */}
         <div className="space-y-4 lg:col-span-6">
-          <div className="relative aspect-square w-full overflow-hidden rounded-3xl border border-zinc-200/80 bg-rose-50/20 shadow-xs">
-            <img
-              src={product.images[0] || ""}
-              alt={product.title}
-              className="h-full w-full object-cover"
-            />
-            {product.isEgglessAvailable && (
-              <span className="absolute top-4 left-4 inline-flex items-center gap-1 rounded-full bg-emerald-700 px-3 py-1 text-xs font-semibold text-white shadow-sm">
-                🌱 Pure Vegetarian / Eggless Option
-              </span>
-            )}
-          </div>
-
-          {product.images.length > 1 && (
-            <div className="grid grid-cols-4 gap-3">
-              {product.images.map((img, idx) => (
-                <div
-                  key={idx}
-                  className="relative aspect-square overflow-hidden rounded-xl border border-zinc-200 hover:border-rose-400 cursor-pointer"
-                >
-                  <img src={img} alt="" className="h-full w-full object-cover" />
-                </div>
-              ))}
-            </div>
-          )}
+          <ProductImageGallery
+            images={displayImages}
+            title={product.title}
+            isEgglessAvailable={product.isEgglessAvailable}
+          />
 
           {/* Vendor Badge */}
           <div className="rounded-2xl border border-zinc-200 bg-white p-4">
@@ -141,7 +186,7 @@ export default async function ProductDetailPage({ params }: PDPPageProps) {
                 </div>
               </div>
               <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-bold text-emerald-700 border border-emerald-200">
-                ⭐ 4.9 Super Vendor
+                ⭐ Verified Vendor
               </span>
             </div>
           </div>
@@ -176,18 +221,25 @@ export default async function ProductDetailPage({ params }: PDPPageProps) {
               {product.title}
             </h1>
 
-            {/* Ratings Bar */}
-            <div className="mt-3 flex items-center gap-2 text-xs text-zinc-600">
-              <div className="flex items-center gap-1 rounded-md bg-emerald-600 px-2 py-0.5 font-bold text-white">
-                <span>4.9</span>
-                <Star className="h-3 w-3 fill-white" />
+            {/* Ratings Bar - Honest reporting with no fabricated numbers */}
+            {verifiedReviews.length > 0 && avgRating !== null ? (
+              <div className="mt-3 flex items-center gap-2 text-xs text-zinc-600">
+                <div className="flex items-center gap-1 rounded-md bg-emerald-600 px-2 py-0.5 font-bold text-white">
+                  <span>{avgRating.toFixed(1)}</span>
+                  <Star className="h-3 w-3 fill-white" />
+                </div>
+                <span className="font-semibold text-zinc-800">
+                  {verifiedReviews.length} Verified {verifiedReviews.length === 1 ? "Review" : "Reviews"}
+                </span>
+                <span className="text-zinc-400">•</span>
+                <span className="text-emerald-700 font-medium">Verified Purchases</span>
               </div>
-              <span className="font-semibold text-zinc-800">
-                {product.reviews.length || 24} Verified Reviews
-              </span>
-              <span className="text-zinc-400">•</span>
-              <span className="text-emerald-700 font-medium">98% Recommended</span>
-            </div>
+            ) : (
+              <div className="mt-2 flex items-center gap-1.5 text-xs text-zinc-500">
+                <Sparkles className="h-3.5 w-3.5 text-amber-500" />
+                <span>Handcrafted fresh on order by artisan florists & bakers</span>
+              </div>
+            )}
           </div>
 
           {/* Interactive PDP Component (Variants, Slots, Eggless, Addons, Cart) */}
@@ -200,7 +252,7 @@ export default async function ProductDetailPage({ params }: PDPPageProps) {
               productType: product.productType,
               basePrice: product.basePrice,
               compareAtPrice: product.compareAtPrice,
-              images: product.images,
+              images: displayImages,
               isEgglessAvailable: product.isEgglessAvailable,
               isCustomMessageSupported: product.isCustomMessageSupported,
             }}

@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import {
   MapPin,
@@ -121,68 +122,97 @@ const FAQS = [
 
 export function GuwahatiSEOSection() {
   return (
-    <section className="border-t border-rose-100 bg-white py-14 space-y-12">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
+    <section className="border-t border-rose-100 bg-card py-14">
+      <div className="mx-auto flex max-w-7xl flex-col gap-12 px-4 sm:px-6 lg:px-8">
         {/* Top Banner & Header */}
-        <div className="rounded-3xl border border-rose-100 bg-gradient-to-br from-rose-50/70 via-white to-pink-50/40 p-6 sm:p-10 shadow-xs space-y-4">
-          <div className="inline-flex items-center gap-2 rounded-full border border-rose-200 bg-white px-3.5 py-1 text-xs font-semibold text-rose-700 shadow-2xs">
-            <MapPin className="h-3.5 w-3.5 text-rose-600" />
-            <span>Guwahati City Gifting Hub</span>
-          </div>
+        <div className="rounded-3xl border border-rose-100 bg-gradient-to-br from-primary-soft via-card to-accent-soft/30 p-6 text-left shadow-xs sm:p-10">
+          <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-10">
+            <div className="flex flex-col gap-4 lg:col-span-7">
+              <div className="inline-flex items-center gap-2 rounded-full border border-rose-200 bg-white px-3.5 py-1 text-xs font-semibold text-rose-700 shadow-2xs self-start">
+                <MapPin className="h-3.5 w-3.5 text-rose-600" />
+                <span>Guwahati City Gifting Hub</span>
+              </div>
 
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-serif text-zinc-900 leading-tight">
-            Online Flowers, Cake & Plant Delivery in Guwahati
-          </h2>
+              <h2 className="font-display text-2xl font-extrabold leading-tight text-foreground sm:text-3xl lg:text-4xl">
+                Online Flowers, Cake & Plant Delivery in Guwahati
+              </h2>
 
-          <p className="text-base font-medium text-rose-800">
-            Fresh cakes and beautiful flowers delivered the same day across Guwahati
-          </p>
+              <p className="text-base font-medium text-primary">
+                Fresh cakes and beautiful flowers delivered the same day across Guwahati
+              </p>
 
-          <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed max-w-4xl">
-            Celebrate every special moment with Bloom & Bakes. From birthdays and anniversaries to weddings, Valentine&apos;s Day, Women&apos;s Day, and surprise celebrations — we help you send love with freshly baked cakes and hand-crafted flower bouquets.
-          </p>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                Celebrate every special moment with MyPetalsCart. From birthdays and anniversaries to weddings, Valentine&apos;s Day, Women&apos;s Day, and surprise celebrations — we help you send love with freshly baked cakes and hand-crafted flower bouquets.
+              </p>
 
-          {/* Badges */}
-          <div className="flex flex-wrap items-center gap-2 pt-1">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-100/70 px-3 py-1 text-xs font-semibold text-rose-900">
-              <Cake className="h-3.5 w-3.5 text-rose-600" />
-              Fresh Cakes
-            </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-pink-100/70 px-3 py-1 text-xs font-semibold text-pink-900">
-              <Sparkles className="h-3.5 w-3.5 text-pink-600" />
-              Premium Flowers
-            </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100/70 px-3 py-1 text-xs font-semibold text-emerald-900">
-              <Truck className="h-3.5 w-3.5 text-emerald-600" />
-              Fast Same-Day Delivery
-            </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-purple-100/70 px-3 py-1 text-xs font-semibold text-purple-900">
-              <Clock className="h-3.5 w-3.5 text-purple-600" />
-              Midnight (11 PM - 12 AM)
-            </span>
-          </div>
+              {/* Badges */}
+              <div className="flex flex-wrap items-center gap-2 pt-1">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-100/70 px-3 py-1 text-xs font-semibold text-rose-900">
+                  <Cake className="h-3.5 w-3.5 text-rose-600" />
+                  Fresh Cakes
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-100/80 px-3 py-1 text-xs font-semibold text-rose-900">
+                  <Sparkles className="h-3.5 w-3.5 text-primary" />
+                  Premium Flowers
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-success-soft px-3 py-1 text-xs font-semibold text-emerald-900">
+                  <Truck className="h-3.5 w-3.5 text-success" />
+                  Fast Same-Day Delivery
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-accent-soft px-3 py-1 text-xs font-semibold text-amber-900">
+                  <Clock className="h-3.5 w-3.5 text-accent" />
+                  Midnight (11 PM - 12 AM)
+                </span>
+              </div>
 
-          {/* CTAs */}
-          <div className="flex flex-wrap items-center gap-3 pt-2">
-            <Link
-              href="/catalog?category=combos"
-              className="rounded-full bg-rose-600 hover:bg-rose-700 text-white px-5 py-2.5 text-xs font-bold shadow-xs hover:shadow transition flex items-center gap-2"
-            >
-              <span>Order Flowers & Cakes</span>
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
-            <Link
-              href="/catalog?category=cakes"
-              className="rounded-full bg-white hover:bg-zinc-50 text-zinc-800 border border-zinc-300 px-5 py-2.5 text-xs font-bold shadow-xs transition"
-            >
-              Explore Cakes
-            </Link>
-            <Link
-              href="/city/guwahati"
-              className="rounded-full bg-white hover:bg-rose-50 text-rose-700 border border-rose-200 px-5 py-2.5 text-xs font-bold shadow-xs transition"
-            >
-              View Guwahati City Page
-            </Link>
+              {/* CTAs */}
+              <div className="flex flex-wrap items-center gap-3 pt-2">
+                <Link
+                  href="/catalog?category=combos"
+                  className="rounded-full bg-rose-600 hover:bg-rose-700 text-white px-5 py-2.5 text-xs font-bold shadow-xs hover:shadow transition flex items-center gap-2"
+                >
+                  <span>Order Flowers & Cakes</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+                <Link
+                  href="/catalog?category=cakes"
+                  className="rounded-full bg-white hover:bg-zinc-50 text-zinc-800 border border-zinc-300 px-5 py-2.5 text-xs font-bold shadow-xs transition"
+                >
+                  Explore Cakes
+                </Link>
+                <Link
+                  href="/city/guwahati"
+                  className="rounded-full bg-white hover:bg-rose-50 text-rose-700 border border-rose-200 px-5 py-2.5 text-xs font-bold shadow-xs transition"
+                >
+                  View Guwahati City Page
+                </Link>
+              </div>
+            </div>
+
+            {/* Visual Hero Banner Card */}
+            <div className="lg:col-span-5">
+              <div className="relative overflow-hidden rounded-3xl border border-rose-200/80 bg-white shadow-xl shadow-rose-950/5">
+                <div className="relative aspect-[4/3] w-full sm:aspect-[16/11]">
+                  <Image
+                    src="/images/city-delivery-hero.jpg"
+                    alt="Guwahati fresh floral bouquets and delicious cakes delivery"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 40vw"
+                    className="object-cover transition-transform duration-500 hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between rounded-xl bg-white/95 backdrop-blur-md px-3.5 py-2 shadow-md">
+                    <div>
+                      <p className="text-xs font-bold text-zinc-900">Guwahati Express Hub</p>
+                      <p className="text-[11px] text-rose-600 font-medium">Boutique Bouquets & Oven-Fresh Cakes</p>
+                    </div>
+                    <span className="rounded-full bg-emerald-100 text-emerald-800 px-2 py-0.5 text-[10px] font-bold">
+                      2-Hour Delivery
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -190,10 +220,10 @@ export function GuwahatiSEOSection() {
         <div className="rounded-3xl border border-zinc-200 bg-white p-6 sm:p-8 space-y-6 shadow-xs">
           <div className="max-w-3xl space-y-2">
             <h3 className="text-xl sm:text-2xl font-bold font-serif text-zinc-900">
-              Bloom & Bakes – Cake Delivery in Guwahati. Delicious Cakes for Every Celebration
+              MyPetalsCart – Cake Delivery in Guwahati. Delicious Cakes for Every Celebration
             </h3>
             <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed">
-              Bloom & Bakes is one of the leading online cake delivery services in Guwahati. We deliver fresh, delicious cakes to your doorstep across Guwahati — including Same Day & Midnight delivery. Choose from a wide range of cakes including birthday cakes, anniversary cakes, designer cakes, bento cakes, cupcakes, and more. Whether it&apos;s a celebration or a surprise, enjoy the best cake delivery in Guwahati with Bloom & Bakes.
+              MyPetalsCart is one of the leading online cake delivery services in Guwahati. We deliver fresh, delicious cakes to your doorstep across Guwahati — including Same Day & Midnight delivery. Choose from a wide range of cakes including birthday cakes, anniversary cakes, designer cakes, bento cakes, cupcakes, and more. Whether it&apos;s a celebration or a surprise, enjoy the best cake delivery in Guwahati with MyPetalsCart.
             </p>
           </div>
 
@@ -204,7 +234,7 @@ export function GuwahatiSEOSection() {
                 <span>Cake for Every Happy Moment</span>
               </h4>
               <p className="text-xs text-zinc-600 leading-relaxed">
-                Cake is not just for birthdays — it&apos;s for every happy moment. At Bloom & Bakes, we offer freshly baked cakes made with premium ingredients, perfect for:
+                Cake is not just for birthdays — it&apos;s for every happy moment. At MyPetalsCart, we offer freshly baked cakes made with premium ingredients, perfect for:
               </p>
               <ul className="text-xs space-y-1.5 text-zinc-700">
                 <li className="flex items-center gap-2">
@@ -278,7 +308,7 @@ export function GuwahatiSEOSection() {
               </p>
             </div>
             <a
-              href="https://api.whatsapp.com/send?text=Hi%20Bloom%20and%20Bakes,%20I%20want%20to%20order%20in%20Guwahati"
+              href="https://api.whatsapp.com/send?text=Hi%20MyPetalsCart,%20I%20want%20to%20order%20in%20Guwahati"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-1.5 text-xs font-bold shadow-xs shrink-0 self-start sm:self-auto"
@@ -302,7 +332,7 @@ export function GuwahatiSEOSection() {
 
           <div className="rounded-2xl bg-rose-50/60 border border-rose-200/80 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
             <span className="text-rose-950 font-medium">
-              Don&apos;t see your area listed? <a href="https://api.whatsapp.com/send?text=Hi%20Bloom%20and%20Bakes,%20I%20want%20to%20confirm%20delivery%20in%20Guwahati" target="_blank" rel="noopener noreferrer" className="font-bold text-rose-700 underline">Chat with us</a> — we cover 40+ localities across Guwahati.
+              Don&apos;t see your area listed? <a href="https://api.whatsapp.com/send?text=Hi%20MyPetalsCart,%20I%20want%20to%20confirm%20delivery%20in%20Guwahati" target="_blank" rel="noopener noreferrer" className="font-bold text-rose-700 underline">Chat with us</a> — we cover 40+ localities across Guwahati.
             </span>
             <Link
               href="/catalog?delivery=same-day"
@@ -316,61 +346,115 @@ export function GuwahatiSEOSection() {
 
         {/* 3 Occasion Spotlight Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-xs flex flex-col justify-between space-y-4">
-            <div className="space-y-2">
-              <span className="text-2xl">🎂</span>
-              <h4 className="text-lg font-bold font-serif text-zinc-900">
-                Birthday Cake Delivery in Guwahati
-              </h4>
-              <p className="text-xs text-zinc-600 leading-relaxed">
-                Make birthdays unforgettable with our range of birthday cakes — from classic chocolate to designer photo cakes — delivered same-day or at midnight, anywhere in Guwahati.
-              </p>
+          {/* Card 1: Birthday */}
+          <div className="group relative overflow-hidden rounded-3xl min-h-[380px] flex flex-col justify-between p-6 sm:p-7 border border-white/20 shadow-lg transition-all duration-500 hover:shadow-2xl hover:-translate-y-1">
+            <Image
+              src="/images/occasions/birthday.jpg"
+              alt="Birthday cake delivery in Guwahati"
+              fill
+              sizes="(max-width: 768px) 100vw, 33vw"
+              className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/35 transition-opacity duration-300 group-hover:from-black/90" />
+            <div className="absolute inset-0 bg-rose-950/20 mix-blend-multiply" />
+
+            <div className="relative z-10 flex flex-col justify-between h-full space-y-6">
+              <div className="inline-flex items-center gap-2 self-start rounded-full bg-white/20 backdrop-blur-md border border-white/30 px-3.5 py-1 text-xs font-semibold text-white shadow-xs">
+                <span className="text-base leading-none">🎂</span>
+                <span className="uppercase tracking-wider text-[10px] text-rose-200 font-bold">Birthday Special</span>
+              </div>
+
+              <div className="space-y-2.5">
+                <h4 className="text-xl font-bold font-serif text-white tracking-tight leading-snug drop-shadow-xs">
+                  Birthday Cake Delivery in Guwahati
+                </h4>
+                <p className="text-xs text-zinc-200 leading-relaxed font-normal">
+                  Make birthdays unforgettable with our range of birthday cakes — from classic chocolate to designer photo cakes — delivered same-day or at midnight, anywhere in Guwahati.
+                </p>
+              </div>
+
+              <Link
+                href="/catalog?category=cakes&occasion=birthday"
+                className="inline-flex items-center justify-between w-full rounded-2xl bg-white/20 hover:bg-white text-white hover:text-zinc-900 backdrop-blur-md border border-white/35 px-4 py-2.5 text-xs font-bold transition-all duration-300 shadow-sm group/btn"
+              >
+                <span>Shop Birthday Cakes</span>
+                <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover/btn:translate-x-1" />
+              </Link>
             </div>
-            <Link
-              href="/catalog?category=cakes&occasion=birthday"
-              className="inline-flex items-center gap-1 text-xs font-bold text-rose-600 hover:underline pt-2 border-t border-zinc-100"
-            >
-              <span>Shop Birthday Cakes</span>
-              <ArrowRight className="h-3 w-3" />
-            </Link>
           </div>
 
-          <div className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-xs flex flex-col justify-between space-y-4">
-            <div className="space-y-2">
-              <span className="text-2xl">💍</span>
-              <h4 className="text-lg font-bold font-serif text-zinc-900">
-                Anniversary Cake Delivery in Guwahati
-              </h4>
-              <p className="text-xs text-zinc-600 leading-relaxed">
-                Celebrate togetherness with an anniversary cake crafted for the moment — pair it with fresh flowers for a combo that says it best. Same-day and midnight anniversary cake delivery available across Guwahati.
-              </p>
+          {/* Card 2: Anniversary */}
+          <div className="group relative overflow-hidden rounded-3xl min-h-[380px] flex flex-col justify-between p-6 sm:p-7 border border-white/20 shadow-lg transition-all duration-500 hover:shadow-2xl hover:-translate-y-1">
+            <Image
+              src="/images/occasions/anniversary.jpg"
+              alt="Anniversary cake delivery in Guwahati"
+              fill
+              sizes="(max-width: 768px) 100vw, 33vw"
+              className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/35 transition-opacity duration-300 group-hover:from-black/90" />
+            <div className="absolute inset-0 bg-rose-950/20 mix-blend-multiply" />
+
+            <div className="relative z-10 flex flex-col justify-between h-full space-y-6">
+              <div className="inline-flex items-center gap-2 self-start rounded-full bg-white/20 backdrop-blur-md border border-white/30 px-3.5 py-1 text-xs font-semibold text-white shadow-xs">
+                <span className="text-base leading-none">💍</span>
+                <span className="uppercase tracking-wider text-[10px] text-rose-200 font-bold">Anniversary Special</span>
+              </div>
+
+              <div className="space-y-2.5">
+                <h4 className="text-xl font-bold font-serif text-white tracking-tight leading-snug drop-shadow-xs">
+                  Anniversary Cake Delivery in Guwahati
+                </h4>
+                <p className="text-xs text-zinc-200 leading-relaxed font-normal">
+                  Celebrate togetherness with an anniversary cake crafted for the moment — pair it with fresh flowers for a combo that says it best. Same-day and midnight anniversary cake delivery available across Guwahati.
+                </p>
+              </div>
+
+              <Link
+                href="/catalog?category=cakes&occasion=anniversary"
+                className="inline-flex items-center justify-between w-full rounded-2xl bg-white/20 hover:bg-white text-white hover:text-zinc-900 backdrop-blur-md border border-white/35 px-4 py-2.5 text-xs font-bold transition-all duration-300 shadow-sm group/btn"
+              >
+                <span>Shop Anniversary Cakes</span>
+                <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover/btn:translate-x-1" />
+              </Link>
             </div>
-            <Link
-              href="/catalog?category=cakes&occasion=anniversary"
-              className="inline-flex items-center gap-1 text-xs font-bold text-rose-600 hover:underline pt-2 border-t border-zinc-100"
-            >
-              <span>Shop Anniversary Cakes</span>
-              <ArrowRight className="h-3 w-3" />
-            </Link>
           </div>
 
-          <div className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-xs flex flex-col justify-between space-y-4">
-            <div className="space-y-2">
-              <span className="text-2xl">🍰</span>
-              <h4 className="text-lg font-bold font-serif text-zinc-900">
-                Bento Cake Delivery in Guwahati
-              </h4>
-              <p className="text-xs text-zinc-600 leading-relaxed">
-                Our mini Korean-style bento cakes are perfect for small celebrations, desk surprises, or a personal treat — freshly baked and delivered same-day across Guwahati.
-              </p>
+          {/* Card 3: Bento Cakes */}
+          <div className="group relative overflow-hidden rounded-3xl min-h-[380px] flex flex-col justify-between p-6 sm:p-7 border border-white/20 shadow-lg transition-all duration-500 hover:shadow-2xl hover:-translate-y-1">
+            <Image
+              src="/images/bento-cake-spotlight.jpg"
+              alt="Bento cake delivery in Guwahati"
+              fill
+              sizes="(max-width: 768px) 100vw, 33vw"
+              className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/35 transition-opacity duration-300 group-hover:from-black/90" />
+            <div className="absolute inset-0 bg-purple-950/20 mix-blend-multiply" />
+
+            <div className="relative z-10 flex flex-col justify-between h-full space-y-6">
+              <div className="inline-flex items-center gap-2 self-start rounded-full bg-white/20 backdrop-blur-md border border-white/30 px-3.5 py-1 text-xs font-semibold text-white shadow-xs">
+                <span className="text-base leading-none">🍰</span>
+                <span className="uppercase tracking-wider text-[10px] text-purple-200 font-bold">Trending Bento</span>
+              </div>
+
+              <div className="space-y-2.5">
+                <h4 className="text-xl font-bold font-serif text-white tracking-tight leading-snug drop-shadow-xs">
+                  Bento Cake Delivery in Guwahati
+                </h4>
+                <p className="text-xs text-zinc-200 leading-relaxed font-normal">
+                  Our mini Korean-style bento cakes are perfect for small celebrations, desk surprises, or a personal treat — freshly baked and delivered same-day across Guwahati.
+                </p>
+              </div>
+
+              <Link
+                href="/catalog?category=cakes"
+                className="inline-flex items-center justify-between w-full rounded-2xl bg-white/20 hover:bg-white text-white hover:text-zinc-900 backdrop-blur-md border border-white/35 px-4 py-2.5 text-xs font-bold transition-all duration-300 shadow-sm group/btn"
+              >
+                <span>Order Bento Cakes in Guwahati</span>
+                <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover/btn:translate-x-1" />
+              </Link>
             </div>
-            <Link
-              href="/catalog?category=cakes"
-              className="inline-flex items-center gap-1 text-xs font-bold text-rose-600 hover:underline pt-2 border-t border-zinc-100"
-            >
-              <span>Order Bento Cakes in Guwahati</span>
-              <ArrowRight className="h-3 w-3" />
-            </Link>
           </div>
         </div>
 
@@ -440,8 +524,20 @@ export function GuwahatiSEOSection() {
         </div>
 
         {/* Occasions & Valentine Banner */}
-        <div className="rounded-3xl bg-gradient-to-r from-rose-900 via-rose-800 to-rose-950 p-8 sm:p-10 text-white shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-2 max-w-2xl">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-rose-900 via-rose-800 to-rose-950 p-8 sm:p-10 text-white shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
+          {/* Faded relevant celebration background */}
+          <div className="absolute inset-0 pointer-events-none">
+            <Image
+              src="/images/occasions/love-and-romance.jpg"
+              alt="Celebrate occasions with flowers and cakes in Guwahati"
+              fill
+              sizes="100vw"
+              className="object-cover object-center opacity-25 mix-blend-luminosity"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-rose-950/85 via-rose-900/70 to-rose-950/85" />
+          </div>
+
+          <div className="relative z-10 space-y-2 max-w-2xl">
             <span className="rounded-full bg-rose-700/80 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-rose-200">
               Special Celebrations
             </span>
@@ -449,12 +545,12 @@ export function GuwahatiSEOSection() {
               Celebrate Every Occasion with Flowers & Cakes in Guwahati
             </h4>
             <p className="text-xs text-rose-100 leading-relaxed">
-              From Women&apos;s Day and Mother&apos;s Day to anniversaries, birthdays, and &ldquo;just because&rdquo; moments — Bloom & Bakes helps you celebrate every occasion beautifully. Every celebration feels complete with fresh flowers and cake. Make your Valentine feel truly special with romantic cakes and fresh flower bouquets delivered across Guwahati. From classic roses to heart-shaped cakes, we help you express love in the sweetest way.
+              From Women&apos;s Day and Mother&apos;s Day to anniversaries, birthdays, and &ldquo;just because&rdquo; moments — MyPetalsCart helps you celebrate every occasion beautifully. Every celebration feels complete with fresh flowers and cake. Make your Valentine feel truly special with romantic cakes and fresh flower bouquets delivered across Guwahati. From classic roses to heart-shaped cakes, we help you express love in the sweetest way.
             </p>
           </div>
           <Link
             href="/catalog?occasion=love-and-romance"
-            className="rounded-full bg-white text-rose-900 hover:bg-rose-50 px-6 py-3 text-xs font-bold shadow-md transition shrink-0"
+            className="relative z-10 rounded-full bg-white text-rose-900 hover:bg-rose-50 px-6 py-3 text-xs font-bold shadow-md transition shrink-0"
           >
             Send Valentine Gifts
           </Link>
@@ -464,7 +560,7 @@ export function GuwahatiSEOSection() {
         <div className="rounded-3xl border border-zinc-200 bg-white p-6 sm:p-10 shadow-xs space-y-6">
           <div className="text-center max-w-2xl mx-auto space-y-1">
             <h4 className="text-2xl font-bold font-serif text-zinc-900">
-              Why Bloom & Bakes is Loved in Guwahati
+              Why MyPetalsCart is Loved in Guwahati
             </h4>
             <p className="text-xs text-zinc-500">
               Your happiness is our priority — from order placement to doorstep delivery.
@@ -507,7 +603,7 @@ export function GuwahatiSEOSection() {
 
           <div className="pt-4 border-t border-zinc-100 text-center space-y-2">
             <h5 className="text-sm font-bold text-zinc-900">
-              Make Every Moment Special with Bloom & Bakes
+              Make Every Moment Special with MyPetalsCart
             </h5>
             <p className="text-xs text-zinc-600">
               Send flowers and cakes online in Guwahati with ease and confidence. Freshly baked cakes • Hand-crafted bouquets • Fast & reliable delivery.

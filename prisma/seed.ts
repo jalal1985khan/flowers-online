@@ -141,7 +141,7 @@ async function main() {
       name: "Birthday",
       slug: "birthday",
       description: "Make birthdays unforgettable with joyous blooms and decadent cakes.",
-      bannerImage: "https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=1200&q=80",
+      bannerImage: "/images/occasions/birthday.jpg",
       sortOrder: 1,
     },
   });
@@ -151,7 +151,7 @@ async function main() {
       name: "Anniversary",
       slug: "anniversary",
       description: "Celebrate milestones of love with romantic roses and midnight surprises.",
-      bannerImage: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=1200&q=80",
+      bannerImage: "/images/occasions/anniversary.jpg",
       sortOrder: 2,
     },
   });
@@ -161,7 +161,7 @@ async function main() {
       name: "Love & Romance",
       slug: "love-and-romance",
       description: "Speak the language of love with scarlet roses and velvet heart cakes.",
-      bannerImage: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=1200&q=80",
+      bannerImage: "/images/occasions/love-and-romance.jpg",
       sortOrder: 3,
     },
   });
@@ -171,7 +171,7 @@ async function main() {
       name: "Congratulations",
       slug: "congratulations",
       description: "Brighten their achievements with celebratory floral arrangements.",
-      bannerImage: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1200&q=80",
+      bannerImage: "/images/occasions/congratulations.jpg",
       sortOrder: 4,
     },
   });
@@ -183,9 +183,9 @@ async function main() {
       slug: "petals-and-bloom",
       email: "orders@petalsbloom.in",
       phone: "+919876543210",
-      city: "Bengaluru",
-      state: "Karnataka",
-      address: "14/2 Indiranagar 100ft Road",
+      city: "Guwahati",
+      state: "Assam",
+      address: "GS Road, Christian Basti",
       isApproved: true,
       isActive: true,
       commissionRate: 15.0,
@@ -199,9 +199,9 @@ async function main() {
       slug: "the-velvet-cake-studio",
       email: "chef@velvetcakes.in",
       phone: "+919876543211",
-      city: "Bengaluru",
-      state: "Karnataka",
-      address: "88 Koramangala 4th Block",
+      city: "Guwahati",
+      state: "Assam",
+      address: "Zoo Road, Beltola",
       isApproved: true,
       isActive: true,
       commissionRate: 18.0,
@@ -210,21 +210,27 @@ async function main() {
   });
 
   console.log("📍 Creating Service Areas...");
-  const bengaluruPincodes = [
-    "560001", // MG Road / Central
-    "560038", // Indiranagar
-    "560034", // Koramangala
-    "560068", // Madiwala / HSR
-    "560100", // Electronic City
-    "560066", // Whitefield
+  const guwahatiPincodes = [
+    "781001",
+    "781003",
+    "781005",
+    "781006",
+    "781007",
+    "781012",
+    "781022",
+    "781024",
+    "781028",
+    "781036",
+    "781014",
+    "781029",
   ];
 
-  for (const pin of bengaluruPincodes) {
+  for (const pin of guwahatiPincodes) {
     await prisma.vendorServiceArea.create({
       data: {
         vendorId: vendorFlorist.id,
         pincode: pin,
-        city: "Bengaluru",
+        city: "Guwahati",
         minOrderValue: 299,
         deliveryFee: 0, // Free standard delivery
         isSameDaySupported: true,
@@ -237,7 +243,7 @@ async function main() {
       data: {
         vendorId: vendorBakery.id,
         pincode: pin,
-        city: "Bengaluru",
+        city: "Guwahati",
         minOrderValue: 499,
         deliveryFee: 0,
         isSameDaySupported: true,
@@ -458,7 +464,15 @@ async function main() {
         title: "Ferrero Rocher Hazelnut Chocolates (16 Pcs)",
         category: "Chocolates",
         price: 499,
-        image: "https://images.unsplash.com/photo-1548741487-18d16a1a094c?auto=format&fit=crop&w=400&q=80",
+        image: "/16-peaces-chocolate.jpeg",
+      },
+    }),
+    prisma.addon.create({
+      data: {
+        title: "Ferrero Rocher - 200 GM",
+        category: "Chocolates",
+        price: 549,
+        image: "/200gm-chocolate.jpg",
       },
     }),
     prisma.addon.create({
@@ -466,7 +480,7 @@ async function main() {
         title: "Cuddly White Teddy Bear (6 inch)",
         category: "Soft Toys",
         price: 299,
-        image: "https://images.unsplash.com/photo-1559454403-b8fb88521f11?auto=format&fit=crop&w=400&q=80",
+        image: "/teddy.webp",
       },
     }),
   ]);
@@ -493,6 +507,26 @@ async function main() {
       password: vendorPassword,
       role: Role.VENDOR_OWNER,
       vendorId: vendorFlorist.id,
+    },
+  });
+
+  await prisma.user.create({
+    data: {
+      email: "guwahati@bloomandbakes.com",
+      name: "Araz Flora Guwahati Partner",
+      password: vendorPassword,
+      role: Role.VENDOR_OWNER,
+      vendorId: vendorFlorist.id,
+    },
+  });
+
+  await prisma.user.create({
+    data: {
+      email: "chef@velvetcakes.in",
+      name: "Velvet Cake Studio Chef",
+      password: vendorPassword,
+      role: Role.VENDOR_OWNER,
+      vendorId: vendorBakery.id,
     },
   });
 

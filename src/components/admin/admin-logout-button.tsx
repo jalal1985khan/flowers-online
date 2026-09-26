@@ -2,8 +2,9 @@
 
 import React from "react";
 import { LogOut } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-export function AdminLogoutButton() {
+export function AdminLogoutButton({ className }: { className?: string }) {
   const handleLogout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
     window.location.href = "/admin/login";
@@ -12,7 +13,10 @@ export function AdminLogoutButton() {
   return (
     <button
       onClick={handleLogout}
-      className="flex items-center gap-1.5 rounded-lg border border-red-500/30 bg-red-950/30 px-3 py-1.5 text-xs text-red-300 hover:bg-red-900/40 hover:text-red-200 transition font-medium cursor-pointer"
+      className={cn(
+        "flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-card hover:bg-rose-500/10 hover:border-rose-500/30 hover:text-rose-600 dark:hover:text-rose-400 px-3 py-2 text-xs font-semibold text-muted-foreground transition cursor-pointer",
+        className
+      )}
       title="Sign Out from Super Admin"
     >
       <LogOut className="h-3.5 w-3.5" />

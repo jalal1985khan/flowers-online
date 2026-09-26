@@ -43,8 +43,16 @@ interface MegaMenuCategory {
   label: string;
   href: string;
   badge?: string;
+  showZapIcon?: boolean;
   columns: MenuColumn[];
   promoCard: PromoCard;
+}
+
+function navBadgeClasses(badge: string) {
+  const key = badge.toLowerCase();
+  if (key.includes("save")) return "bg-amber-100 text-amber-900 border border-amber-200/60";
+  if (key === "fast" || key === "eco") return "bg-emerald-100 text-emerald-800 border border-emerald-200/60";
+  return "bg-rose-100 text-rose-900 border border-rose-200/60";
 }
 
 export const MEGA_MENU_CATEGORIES: MegaMenuCategory[] = [
@@ -102,8 +110,8 @@ export const MEGA_MENU_CATEGORIES: MegaMenuCategory[] = [
       title: "Royal Red Rose Symphony",
       subtitle: "24 Velvet Red Dutch Roses with Gypsophila & Silk Ribbon",
       badge: "Bestseller #1",
-      image: "https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=600&auto=format&fit=crop&q=80",
-      href: "/product/red-velvet-roses-bouquet",
+      image: "/images/royal-red-rose-symphony.jpg",
+      href: "/product/exotic-25-red-roses-bouquet",
       buttonText: "Order for ₹1,299",
     },
   },
@@ -215,7 +223,7 @@ export const MEGA_MENU_CATEGORIES: MegaMenuCategory[] = [
       title: "Royal Celebration Trio",
       subtitle: "10 Red Roses Bouquet + Half Kg Truffle Cake + 6-inch Teddy Bear",
       badge: "Most Loved Combo",
-      image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=600&auto=format&fit=crop&q=80",
+      image: "/images/hero-flower-cake-bundle.jpg",
       href: "/product/roses-and-cake-celebration-combo",
       buttonText: "Save ₹350 • Order ₹1,699",
     },
@@ -351,10 +359,10 @@ export const MEGA_MENU_CATEGORIES: MegaMenuCategory[] = [
       {
         title: "Upcoming Festivals",
         links: [
-          { label: "🌹 Valentine's & Rose Week", href: "/catalog?category=flowers", isHot: true },
-          { label: "🌸 Women's Day & Mother's Day", href: "/catalog" },
-          { label: "🪔 Diwali & Festive Hampers", href: "/catalog?category=combos" },
-          { label: "🎄 Christmas & New Year", href: "/catalog?category=cakes" },
+          { label: "🌹 Valentine's & Rose Week", href: "/catalog?occasion=love-and-romance", isHot: true },
+          { label: "🧵 Raksha Bandhan Special", href: "/catalog?occasion=raksha-bandhan", isHot: true },
+          { label: "🪔 Diwali & Festive Hampers", href: "/catalog?occasion=diwali", isHot: true },
+          { label: "🎉 New Year Celebrations", href: "/catalog?occasion=new-year" },
         ],
       },
       {
@@ -371,14 +379,15 @@ export const MEGA_MENU_CATEGORIES: MegaMenuCategory[] = [
       title: "Midnight Anniversary Surprise",
       subtitle: "Guaranteed doorbell ring at 11:59 PM with cake, flowers & lights",
       badge: "Signature Experience",
-      image: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=600&auto=format&fit=crop&q=80",
+      image: "/images/midnight-anniversary-surprise.jpg",
       href: "/catalog?occasion=anniversary&delivery=midnight",
       buttonText: "Book Midnight Slot",
     },
   },
   {
     id: "express",
-    label: "⚡ Same-Day & Midnight",
+    label: "Same-Day & Midnight",
+    showZapIcon: true,
     href: "/catalog?delivery=same-day",
     badge: "Fast",
     columns: [
@@ -464,42 +473,37 @@ export function MegaMenu() {
       onMouseLeave={handleMouseLeave}
     >
       {/* Category Navigation Bar */}
-      <div className="mx-auto flex max-w-7xl items-center justify-between text-xs font-medium text-zinc-700">
-        <div className="flex items-center gap-1 sm:gap-2">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 py-1.5 text-xs font-semibold text-foreground">
+        <div className="flex items-center gap-0.5 sm:gap-1 lg:gap-1.5">
           {MEGA_MENU_CATEGORIES.map((cat) => {
             const isActive = activeCategoryId === cat.id;
             return (
               <div
                 key={cat.id}
                 onMouseEnter={() => handleMouseEnter(cat.id)}
-                className="relative py-2.5"
+                className="relative shrink-0"
               >
                 <Link
                   href={cat.href}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wide transition-all duration-150 ${
-                    isActive
-                      ? "bg-rose-50 text-rose-700 shadow-xs"
-                      : "text-zinc-800 hover:text-rose-600 hover:bg-rose-50/50"
-                  }`}
+                  className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors duration-150 ${isActive
+                    ? "bg-primary-soft text-primary font-semibold"
+                    : "text-foreground/90 hover:bg-primary-soft/70 hover:text-primary"
+                    }`}
                 >
-                  <span>{cat.label}</span>
+                  {cat.showZapIcon && (
+                    <Zap className="size-3.5 shrink-0 fill-amber-400 text-amber-500" />
+                  )}
+                  <span className="whitespace-nowrap">{cat.label}</span>
                   {cat.badge && (
                     <span
-                      className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider ${
-                        cat.badge === "Save 20%"
-                          ? "bg-amber-100 text-amber-800"
-                          : cat.badge === "Fast"
-                          ? "bg-emerald-100 text-emerald-800 animate-pulse"
-                          : "bg-rose-100 text-rose-800"
-                      }`}
+                      className={`shrink-0 rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider leading-none ${navBadgeClasses(cat.badge)}`}
                     >
                       {cat.badge}
                     </span>
                   )}
                   <ChevronDown
-                    className={`h-3 w-3 text-zinc-400 transition-transform duration-200 ${
-                      isActive ? "rotate-180 text-rose-600" : ""
-                    }`}
+                    className={`size-3 shrink-0 text-muted transition-transform duration-200 ${isActive ? "rotate-180 text-primary" : ""
+                      }`}
                   />
                 </Link>
               </div>
@@ -507,18 +511,20 @@ export function MegaMenu() {
           })}
         </div>
 
-        {/* Live Delivery Pulse badge on right side of nav */}
-        <div className="hidden xl:flex items-center gap-4 text-zinc-600 text-xs font-medium">
-          <Link
+        <div className="hidden shrink-0 items-center gap-3 pl-3 text-xs font-medium xl:flex whitespace-nowrap">
+          {/* <Link
             href="/catalog?delivery=midnight"
-            className="flex items-center gap-1 text-purple-700 font-semibold hover:underline"
+            className="flex items-center gap-1.5 text-violet-800 hover:text-violet-900 hover:underline"
           >
-            <span>🌙 Midnight Delivery Active</span>
-          </Link>
-          <span className="text-zinc-300">|</span>
-          <span className="flex items-center gap-1.5 text-zinc-600">
-            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>2-Hour Delivery in Your Area</span>
+            <span className="text-sm leading-none" aria-hidden>
+              🌙
+            </span>
+            <span>Midnight Delivery</span>
+          </Link> */}
+          <span className="h-3.5 w-px bg-border" aria-hidden />
+          <span className="flex items-center gap-1.5 text-muted-foreground">
+            <span className="size-2 shrink-0 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-foreground">2-Hour Delivery in Your Area</span>
           </span>
         </div>
       </div>
@@ -528,32 +534,31 @@ export function MegaMenu() {
         <div
           onMouseEnter={() => handleMouseEnter(activeCategory.id)}
           onMouseLeave={handleMouseLeave}
-          className="absolute left-0 right-0 top-full w-full bg-white border-b border-rose-100 shadow-2xl transition-all duration-200 animate-in fade-in slide-in-from-top-2"
+          className="absolute left-0 right-0 top-full w-full border-b border-border bg-card shadow-2xl transition-all duration-200"
         >
           <div className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
             <div className="grid grid-cols-12 gap-8">
               {/* Columns for subcategories (8 columns total) */}
               <div
-                className={`grid gap-6 ${
-                  activeCategory.columns.length === 4
-                    ? "grid-cols-4 col-span-9"
-                    : activeCategory.columns.length === 3
+                className={`grid gap-6 ${activeCategory.columns.length === 4
+                  ? "grid-cols-4 col-span-9"
+                  : activeCategory.columns.length === 3
                     ? "grid-cols-3 col-span-8"
                     : "grid-cols-4 col-span-9"
-                }`}
+                  }`}
               >
                 {activeCategory.columns.map((column, idx) => (
-                  <div key={idx} className="space-y-3">
-                    <h3 className="text-xs font-bold uppercase tracking-wider text-rose-950 pb-2 border-b border-rose-100/70">
+                  <div key={idx} className="flex flex-col gap-3">
+                    <h3 className="border-b border-rose-100/70 pb-2 text-xs font-bold uppercase tracking-wider text-foreground">
                       {column.title}
                     </h3>
-                    <ul className="space-y-2 text-xs">
+                    <ul className="flex flex-col gap-2 text-xs">
                       {column.links.map((link, linkIdx) => (
                         <li key={linkIdx}>
                           <Link
                             href={link.href}
                             onClick={() => setActiveCategoryId(null)}
-                            className="group flex items-center justify-between text-zinc-600 hover:text-rose-600 hover:translate-x-1 transition-transform duration-150 py-0.5"
+                            className="group flex items-center justify-between py-0.5 text-muted-foreground transition-transform duration-150 hover:translate-x-1 hover:text-primary"
                           >
                             <span className="group-hover:font-medium">
                               {link.label}
@@ -593,10 +598,10 @@ export function MegaMenu() {
                     </div>
                   </div>
 
-                  <h4 className="text-sm font-bold text-zinc-900 group-hover:text-rose-600 font-serif">
+                  <h4 className="font-display text-sm font-bold text-foreground group-hover:text-primary">
                     {activeCategory.promoCard.title}
                   </h4>
-                  <p className="mt-1 text-xs text-zinc-500 line-clamp-2 leading-relaxed">
+                  <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
                     {activeCategory.promoCard.subtitle}
                   </p>
                 </div>

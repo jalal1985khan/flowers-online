@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useLocation } from "@/lib/location-context";
 import { useCart } from "@/lib/cart-context";
 import { PincodeModal } from "./pincode-modal";
@@ -35,11 +36,15 @@ export function Header() {
       .then((data) => {
         if (data.user) setCurrentUser(data.user);
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   const handleLogout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
+    try {
+      localStorage.removeItem("bloom_saved_senders");
+      localStorage.removeItem("bloom_saved_recipients");
+    } catch { }
     setCurrentUser(null);
     window.location.href = "/";
   };
@@ -57,18 +62,15 @@ export function Header() {
         {/* Main header row */}
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
           {/* Brand Logo */}
-          <Link href="/" className="flex items-center gap-2 group shrink-0">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-rose-600 to-amber-500 text-white shadow-md group-hover:scale-105 transition">
-              <Sparkles className="h-5 w-5" />
-            </div>
-            <div>
-              <span className="text-xl font-bold tracking-tight text-zinc-900 font-serif">
-                Bloom & Bakes
-              </span>
-              <span className="block text-[10px] font-medium uppercase tracking-wider text-rose-600">
-                Artisan Florist & Bakery
-              </span>
-            </div>
+          <Link href="/" className="flex items-center shrink-0 group py-0.5">
+            <Image
+              src="/logo.png"
+              alt="MyPetalsCart"
+              width={220}
+              height={73}
+              className="h-10 sm:h-11 w-auto object-contain transition-transform duration-200 group-hover:scale-[1.02]"
+              priority
+            />
           </Link>
 
           {/* Delivery Location Chip */}
@@ -93,23 +95,24 @@ export function Header() {
 
           {/* Actions */}
           <div className="flex items-center gap-3">
-            {/* Vendor & Admin links for demo convenience */}
-            <div className="hidden sm:flex items-center gap-1 text-xs font-medium text-zinc-600">
-              <Link
-                href="/vendor"
-                className="flex items-center gap-1 px-2.5 py-1 rounded-md hover:bg-zinc-100 text-zinc-700 transition"
-              >
-                <Store className="h-3.5 w-3.5 text-zinc-500" />
-                <span>Vendor Portal</span>
-              </Link>
-              <Link
-                href="/admin"
-                className="flex items-center gap-1 px-2.5 py-1 rounded-md hover:bg-zinc-100 text-zinc-700 transition"
-              >
-                <ShieldCheck className="h-3.5 w-3.5 text-zinc-500" />
-                <span>Admin</span>
-              </Link>
-            </div>
+            {process.env.NEXT_PUBLIC_SHOW_PORTAL_LINKS === "true" && (
+              <div className="hidden sm:flex items-center gap-1 text-xs font-medium text-zinc-600">
+                <Link
+                  href="/vendor"
+                  className="flex items-center gap-1 px-2.5 py-1 rounded-md hover:bg-zinc-100 text-zinc-700 transition"
+                >
+                  <Store className="h-3.5 w-3.5 text-zinc-500" />
+                  <span>Vendor Portal</span>
+                </Link>
+                <Link
+                  href="/admin"
+                  className="flex items-center gap-1 px-2.5 py-1 rounded-md hover:bg-zinc-100 text-zinc-700 transition"
+                >
+                  <ShieldCheck className="h-3.5 w-3.5 text-zinc-500" />
+                  <span>Admin</span>
+                </Link>
+              </div>
+            )}
 
             {/* Account / Auth link */}
             {currentUser ? (
@@ -168,7 +171,7 @@ export function Header() {
         </div>
 
         {/* Desktop Mega Menu Bar */}
-        <nav className="hidden lg:block border-t border-rose-100/60 bg-white px-4">
+        <nav className="hidden border-t border-rose-900/10 bg-[#fcf8f8] px-4 shadow-[inset_0_-1px_0_0_var(--color-border)] lg:block">
           <MegaMenu />
         </nav>
 
@@ -211,11 +214,10 @@ export function Header() {
                         onClick={() =>
                           setExpandedMobileCat(isExpanded ? null : cat.id)
                         }
-                        className={`w-full flex items-center justify-between px-4 py-3 font-semibold transition ${
-                          isExpanded
-                            ? "bg-rose-50/60 text-rose-900"
-                            : "text-zinc-800 hover:bg-zinc-50"
-                        }`}
+                        className={`w-full flex items-center justify-between px-4 py-3 font-semibold transition ${isExpanded
+                          ? "bg-rose-50/60 text-rose-900"
+                          : "text-zinc-800 hover:bg-zinc-50"
+                          }`}
                       >
                         <div className="flex items-center gap-2">
                           <span>{cat.label}</span>
@@ -226,9 +228,8 @@ export function Header() {
                           )}
                         </div>
                         <ChevronDown
-                          className={`h-4 w-4 text-zinc-400 transition-transform ${
-                            isExpanded ? "rotate-180 text-rose-600" : ""
-                          }`}
+                          className={`h-4 w-4 text-zinc-400 transition-transform ${isExpanded ? "rotate-180 text-rose-600" : ""
+                            }`}
                         />
                       </button>
 

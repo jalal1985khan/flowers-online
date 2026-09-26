@@ -1,55 +1,56 @@
 import { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
+import { getBaseUrl } from "@/lib/seo-config";
+import { LIVE_DELIVERY_CITY_SLUGS } from "@/lib/market-cities";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const baseUrl = getBaseUrl();
 
-  const [products, categories, occasions] = await Promise.all([
+  const [products, seoPages] = await Promise.all([
     prisma.product.findMany({
       where: { isAvailable: true, isApproved: true },
       select: { slug: true, updatedAt: true },
     }),
-    prisma.category.findMany({
+    prisma.seoLandingPage.findMany({
       where: { isActive: true },
-      select: { slug: true },
+      select: { slug: true, updatedAt: true },
     }),
-    prisma.occasion.findMany({
-      where: { isActive: true },
-      select: { slug: true },
-    }),
+  ]);
+
+  const [categories, occasions] = await Promise.all([
+    prisma.category.findMany({ where: { isActive: true }, select: { slug: true } }),
+    prisma.occasion.findMany({ where: { isActive: true }, select: { slug: true } }),
   ]);
 
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: `${baseUrl}`,
-      lastModified: new Date(),
       changeFrequency: "daily",
       priority: 1.0,
     },
     {
       url: `${baseUrl}/catalog`,
-      lastModified: new Date(),
-      changeFrequency: "hourly",
+      changeFrequency: "daily",
       priority: 0.9,
     },
-    {
-      url: `${baseUrl}/city/bengaluru`,
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/city/delhi`,
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/city/mumbai`,
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 0.8,
-    },
+    // Core commercial category landing pages
+    ...categories.map((c) => ({
+      url: `${baseUrl}/catalog?category=${c.slug}`,
+      changeFrequency: "daily" as const,
+      priority: 0.85,
+    })),
+    // Core high-intent occasion landing pages
+    ...occasions.map((o) => ({
+      url: `${baseUrl}/catalog?occasion=${o.slug}`,
+      changeFrequency: "daily" as const,
+      priority: 0.85,
+    })),
+    // Only index cities with live, verified delivery operations
+    ...LIVE_DELIVERY_CITY_SLUGS.map((city) => ({
+      url: `${baseUrl}/city/${city}`,
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    })),
   ];
 
   const productRoutes: MetadataRoute.Sitemap = products.map((p) => ({
@@ -59,19 +60,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  const categoryRoutes: MetadataRoute.Sitemap = categories.map((c) => ({
-    url: `${baseUrl}/catalog?category=${c.slug}`,
-    lastModified: new Date(),
+  const seoLandingRoutes: MetadataRoute.Sitemap = seoPages.map((p) => ({
+    url: `${baseUrl}/${p.slug}`,
+    lastModified: p.updatedAt,
     changeFrequency: "weekly",
-    priority: 0.7,
+    priority: 0.75,
   }));
 
-  const occasionRoutes: MetadataRoute.Sitemap = occasions.map((o) => ({
-    url: `${baseUrl}/catalog?occasion=${o.slug}`,
-    lastModified: new Date(),
-    changeFrequency: "weekly",
-    priority: 0.7,
-  }));
-
-  return [...staticRoutes, ...productRoutes, ...categoryRoutes, ...occasionRoutes];
+  return [
+    ...staticRoutes,
+    ...seoLandingRoutes,
+    ...productRoutes,
+  ];
 }

@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sparkles, Lock, Mail, User, Phone, CheckCircle2, ArrowRight } from "lucide-react";
@@ -59,13 +60,23 @@ export default function CustomerLoginPage() {
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md space-y-6">
         {/* Brand header */}
-        <div className="text-center space-y-2">
-          <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-600 text-white shadow-md">
-            <Sparkles className="h-6 w-6" />
-          </div>
+        <div className="text-center space-y-3">
+          <Link href="/" className="inline-block mx-auto">
+            <Image
+              src="/logo.png"
+              alt="MyPetalsCart"
+              width={220}
+              height={73}
+              className="h-12 w-auto object-contain mx-auto"
+              priority
+            />
+          </Link>
           <h1 className="text-2xl font-bold font-serif text-zinc-900">
-            Welcome to Bloom & Bakes
+            Welcome to MyPetalsCart
           </h1>
+          <p className="text-xs font-semibold text-rose-600">
+            Flowers • Cakes • Gifts • Delivered With Love
+          </p>
           <p className="text-xs text-zinc-500">
             Sign in to track orders, manage saved addresses, and receive special occasion reminders.
           </p>
@@ -96,9 +107,8 @@ export default function CustomerLoginPage() {
                 setTab("login");
                 setError(null);
               }}
-              className={`py-2 rounded-lg transition ${
-                tab === "login" ? "bg-white text-zinc-900 shadow-xs" : "text-zinc-500 hover:text-zinc-800"
-              }`}
+              className={`py-2 rounded-lg transition ${tab === "login" ? "bg-white text-zinc-900 shadow-xs" : "text-zinc-500 hover:text-zinc-800"
+                }`}
             >
               Sign In
             </button>
@@ -108,9 +118,8 @@ export default function CustomerLoginPage() {
                 setTab("signup");
                 setError(null);
               }}
-              className={`py-2 rounded-lg transition ${
-                tab === "signup" ? "bg-white text-zinc-900 shadow-xs" : "text-zinc-500 hover:text-zinc-800"
-              }`}
+              className={`py-2 rounded-lg transition ${tab === "signup" ? "bg-white text-zinc-900 shadow-xs" : "text-zinc-500 hover:text-zinc-800"
+                }`}
             >
               Create Account
             </button>

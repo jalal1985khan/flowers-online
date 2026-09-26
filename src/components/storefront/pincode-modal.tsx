@@ -6,14 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLocation } from "@/lib/location-context";
 import { MapPin, CheckCircle2, AlertCircle } from "lucide-react";
-
-const POPULAR_CITIES = [
-  { city: "Bengaluru", pincode: "560001", area: "MG Road" },
-  { city: "Bengaluru", pincode: "560038", area: "Indiranagar" },
-  { city: "Delhi", pincode: "110001", area: "Connaught Place" },
-  { city: "Mumbai", pincode: "400001", area: "Fort" },
-  { city: "Gurugram", pincode: "122001", area: "Cyber City" },
-];
+import { DEFAULT_PINCODE, POPULAR_DELIVERY_ZONES } from "@/lib/delivery-pincodes";
 
 export function PincodeModal() {
   const { isPincodeModalOpen, setIsPincodeModalOpen, location, setLocation, checkPincode } =
@@ -42,7 +35,7 @@ export function PincodeModal() {
       });
       setIsPincodeModalOpen(false);
     } else {
-      setError("Sorry, delivery is currently not serviceable at this pincode. Try 560001 or 560038.");
+      setError(`Sorry, we don't deliver to this pincode yet. Try ${DEFAULT_PINCODE} (Guwahati) or another zone below.`);
     }
   };
 
@@ -60,7 +53,7 @@ export function PincodeModal() {
             <Input
               type="text"
               maxLength={6}
-              placeholder="Enter 6-digit Pincode (e.g. 560038)"
+              placeholder="Enter 6-digit Pincode (e.g. 781001)"
               className="pl-9 font-medium tracking-wide"
               value={inputPin}
               onChange={(e) => {
@@ -93,7 +86,7 @@ export function PincodeModal() {
             Popular Delivery Zones
           </p>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-            {POPULAR_CITIES.map((item) => (
+            {POPULAR_DELIVERY_ZONES.map((item) => (
               <button
                 key={item.pincode}
                 onClick={() => {

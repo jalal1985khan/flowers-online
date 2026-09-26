@@ -26,6 +26,9 @@ export default async function AccountPage() {
 
   const [orders, addresses] = await Promise.all([
     prisma.order.findMany({
+      where: {
+        OR: [{ customerId: session.id }, { customerEmail: session.email }],
+      },
       include: {
         deliverySlot: true,
         items: true,
@@ -34,9 +37,17 @@ export default async function AccountPage() {
       take: 10,
     }),
     prisma.customerAddress.findMany({
+      where: { userId: session.id },
       orderBy: { createdAt: "desc" },
     }),
   ]);
+
+  const initials = (session.name || session.email)
+    .split(/\s+/)
+    .map((p) => p[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8 space-y-8">
@@ -44,20 +55,18 @@ export default async function AccountPage() {
       <div className="rounded-3xl border border-rose-200/80 bg-gradient-to-r from-rose-50 via-white to-amber-50/50 p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-4">
           <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-600 text-white font-bold text-xl shadow-md">
-            A
+            {initials}
           </div>
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-2xl font-bold font-serif text-zinc-900">
-                Aakash Sharma
+                {session.name || "Your Account"}
               </h1>
               <span className="rounded-full bg-rose-100 px-2.5 py-0.5 text-[10px] font-bold text-rose-800">
                 Celebration Member
               </span>
             </div>
-            <p className="text-xs text-zinc-500 mt-1">
-              aakash@example.com • +91 9876543210
-            </p>
+            <p className="text-xs text-zinc-500 mt-1">{session.email}</p>
           </div>
         </div>
 
@@ -127,7 +136,7 @@ export default async function AccountPage() {
                     </div>
 
                     <div className="flex items-center gap-4 sm:flex-col sm:items-end">
-                      <div className="text-base font-bold text-zinc-900 font-serif">
+                      <div className="text-base font-bold text-zinc-900 tracking-tight tabular-nums">
                         {formatINR(o.total)}
                       </div>
                       <Link href={`/order/${o.orderNumber}`}>
@@ -152,36 +161,30 @@ export default async function AccountPage() {
             </h2>
           </div>
 
-          <div className="space-y-3">
-            <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-xs text-xs space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-zinc-900">Sneha Patel</span>
-                <span className="rounded bg-rose-50 px-2 py-0.5 text-[10px] font-bold text-rose-700">
-                  HOME
-                </span>
+          <div className="flex flex-col gap-3">
+            {addresses.length === 0 ? (
+              <div className="rounded-2xl border border-dashed border-zinc-300 bg-white p-6 text-center text-xs text-zinc-500">
+                No saved addresses yet. They will appear here after you save them at checkout.
               </div>
-              <p className="text-zinc-600">
-                Flat 402, Sunshine Heights, 12th Main, Indiranagar
-              </p>
-              <p className="text-zinc-500 font-mono">
-                Bengaluru — 560038 • +91 9876543211
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-xs text-xs space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-zinc-900">Rahul Verma</span>
-                <span className="rounded bg-zinc-100 px-2 py-0.5 text-[10px] font-bold text-zinc-600">
-                  WORK
-                </span>
-              </div>
-              <p className="text-zinc-600">
-                Prestige Tech Park, Tower B, Outer Ring Road
-              </p>
-              <p className="text-zinc-500 font-mono">
-                Bengaluru — 560068 • +91 9876543212
-              </p>
-            </div>
+            ) : (
+              addresses.map((addr) => (
+                <div
+                  key={addr.id}
+                  className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-xs text-xs flex flex-col gap-1"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-zinc-900">{addr.name}</span>
+                    <span className="rounded bg-rose-50 px-2 py-0.5 text-[10px] font-bold text-rose-700">
+                      {addr.label}
+                    </span>
+                  </div>
+                  <p className="text-zinc-600">{addr.address}</p>
+                  <p className="text-zinc-500 font-mono">
+                    {addr.city} — {addr.pincode} • +91 {addr.phone}
+                  </p>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>

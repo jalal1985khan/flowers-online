@@ -13,45 +13,60 @@ import {
   AlertCircle,
   User,
   Phone,
+  Mail,
+  Printer,
+  Heart,
 } from "lucide-react";
+import { VendorPrintSlipModal } from "./vendor-print-slip";
 
-interface OrderProps {
-  order: {
-    id: string;
-    orderNumber: string;
-    customerName: string;
-    customerPhone: string;
-    recipientName: string;
-    recipientPhone: string;
-    deliveryAddress: string;
-    deliveryCity: string;
-    deliveryPincode: string;
-    landmark?: string | null;
-    deliveryInstructions?: string | null;
-    deliveryDate: string;
-    deliverySlot: {
-      title: string;
-      startTime: string;
-      endTime: string;
-    };
-    status: string;
-    subtotal: number;
-    total: number;
-    items: Array<{
-      id: string;
-      title: string;
-      variantName?: string | null;
-      quantity: number;
-      totalPrice: number;
-      customCakeMessage?: string | null;
-      isEggless: boolean;
-    }>;
+export interface OrderData {
+  id: string;
+  orderNumber: string;
+  customerName: string;
+  customerPhone: string;
+  customerEmail?: string | null;
+  recipientName: string;
+  recipientPhone: string;
+  deliveryAddress: string;
+  deliveryCity: string;
+  deliveryPincode: string;
+  landmark?: string | null;
+  deliveryInstructions?: string | null;
+  messageOnCard?: string | null;
+  messageOnCake?: string | null;
+  deliveryDate: string;
+  deliverySlot: {
+    title: string;
+    startTime: string;
+    endTime: string;
   };
+  status: string;
+  subtotal: number;
+  total: number;
+  items: Array<{
+    id: string;
+    title: string;
+    variantName?: string | null;
+    quantity: number;
+    totalPrice: number;
+    customCakeMessage?: string | null;
+    isEggless: boolean;
+  }>;
 }
 
-export function VendorOrderCard({ order: initialOrder }: OrderProps) {
+interface OrderProps {
+  order: OrderData;
+  onStatusChange?: (orderId: string, nextStatus: string) => void;
+}
+
+export function VendorOrderCard({ order: initialOrder, onStatusChange }: OrderProps) {
   const [order, setOrder] = useState(initialOrder);
   const [loading, setLoading] = useState(false);
+  const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
+
+  React.useEffect(() => {
+    setOrder(initialOrder);
+  }, [initialOrder]);
 
   const updateStatus = async (nextStatus: string, note: string) => {
     setLoading(true);
@@ -68,6 +83,7 @@ export function VendorOrderCard({ order: initialOrder }: OrderProps) {
 
       if (res.ok) {
         setOrder((prev) => ({ ...prev, status: nextStatus }));
+        onStatusChange?.(order.id, nextStatus);
       }
     } catch (e) {
       console.error(e);
@@ -94,9 +110,8 @@ export function VendorOrderCard({ order: initialOrder }: OrderProps) {
             #{order.orderNumber}
           </span>
           <span
-            className={`rounded-full border px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider ${
-              statusColors[order.status] || "bg-zinc-100 text-zinc-700"
-            }`}
+            className={`rounded-full border px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider ${statusColors[order.status] || "bg-zinc-100 text-zinc-700"
+              }`}
           >
             {order.status.replace("_", " ")}
           </span>
@@ -116,36 +131,72 @@ export function VendorOrderCard({ order: initialOrder }: OrderProps) {
         </div>
       </div>
 
-      {/* Recipient & Address */}
-      <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2 text-xs bg-zinc-50/80 rounded-xl p-3.5 border border-zinc-100">
-        <div>
-          <div className="font-bold text-zinc-900 flex items-center gap-1.5">
-            <User className="h-3.5 w-3.5 text-zinc-500" />
-            <span>Recipient: {order.recipientName}</span>
+      {/* Recipient & Sender Details */}
+      <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 text-xs bg-zinc-50/80 rounded-xl p-3.5 border border-zinc-100">
+        {/* Deliver To (Recipient) */}
+        <div className="space-y-1.5 border-b sm:border-b-0 sm:border-r border-zinc-200/80 pb-3 sm:pb-0 sm:pr-3">
+          <div className="flex items-center gap-1.5 text-[11px] font-bold text-rose-700 uppercase tracking-wider">
+            <MapPin className="h-3.5 w-3.5 text-rose-600" />
+            <span>Deliver To (Recipient)</span>
           </div>
-          <div className="text-zinc-600 flex items-center gap-1.5 mt-1">
-            <Phone className="h-3.5 w-3.5 text-zinc-400" />
-            <span className="font-mono">{order.recipientPhone}</span>
+          <div className="font-bold text-zinc-900 text-sm">
+            {order.recipientName}
           </div>
-        </div>
-
-        <div>
-          <div className="text-zinc-700 font-medium flex items-start gap-1.5">
-            <MapPin className="h-3.5 w-3.5 text-rose-600 shrink-0 mt-0.5" />
-            <span>
-              {order.deliveryAddress}
-              {order.landmark ? `, Near ${order.landmark}` : ""}
-              <br />
-              {order.deliveryCity} — <strong className="font-mono">{order.deliveryPincode}</strong>
-            </span>
+          <div className="text-zinc-600 flex items-center gap-1.5">
+            <Phone className="h-3 w-3 text-zinc-400" />
+            <span className="font-mono font-semibold text-zinc-800">{order.recipientPhone}</span>
+          </div>
+          <div className="text-zinc-700 font-medium leading-relaxed pt-1">
+            {order.deliveryAddress}
+            {order.landmark && (
+              <span className="block text-zinc-500 text-[11px]">Landmark: Near {order.landmark}</span>
+            )}
+            <strong className="block font-mono text-zinc-900">
+              {order.deliveryCity} — {order.deliveryPincode}
+            </strong>
           </div>
           {order.deliveryInstructions && (
-            <p className="mt-1 text-[11px] text-amber-900 font-semibold">
+            <p className="mt-1 text-[11px] text-amber-900 font-semibold bg-amber-50 p-1.5 rounded border border-amber-200">
               Note: {order.deliveryInstructions}
             </p>
           )}
         </div>
+
+        {/* Ordered By (Sender / Buyer) */}
+        <div className="space-y-1.5 sm:pl-1">
+          <div className="flex items-center gap-1.5 text-[11px] font-bold text-blue-700 uppercase tracking-wider">
+            <User className="h-3.5 w-3.5 text-blue-600" />
+            <span>Ordered By (Sender)</span>
+          </div>
+          <div className="font-bold text-zinc-900 text-sm">
+            {order.customerName}
+          </div>
+          <div className="text-zinc-600 flex items-center gap-1.5">
+            <Phone className="h-3 w-3 text-zinc-400" />
+            <span className="font-mono font-semibold text-zinc-800">{order.customerPhone}</span>
+          </div>
+          {order.customerEmail && (
+            <div className="text-zinc-500 flex items-center gap-1.5 text-[11px] truncate">
+              <Mail className="h-3 w-3 text-zinc-400 shrink-0" />
+              <span>{order.customerEmail}</span>
+            </div>
+          )}
+          <div className="text-[11px] text-zinc-500 pt-1">
+            Prepaid Total: <span className="font-mono font-bold text-zinc-900">{formatINR(order.total)}</span>
+          </div>
+        </div>
       </div>
+
+      {/* Greeting Card Message (if any) */}
+      {order.messageOnCard && (
+        <div className="mt-2.5 rounded-xl border border-rose-200 bg-rose-50/50 p-2.5 text-xs">
+          <div className="flex items-center gap-1 text-[11px] font-bold text-rose-800 uppercase tracking-wider mb-0.5">
+            <Heart className="h-3 w-3 text-rose-600" />
+            <span>Greeting Card Inscription:</span>
+          </div>
+          <p className="italic text-rose-950 font-serif text-xs">"{order.messageOnCard}"</p>
+        </div>
+      )}
 
       {/* Items list */}
       <div className="mt-3 space-y-2">
@@ -185,13 +236,27 @@ export function VendorOrderCard({ order: initialOrder }: OrderProps) {
           </strong>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Print Slip Button — Available once order is accepted */}
+          {order.status !== "PLACED" && (
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={() => setIsPrintModalOpen(true)}
+              className="border-zinc-300 text-zinc-700 hover:bg-zinc-50 gap-1.5 h-8 text-xs font-semibold"
+            >
+              <Printer className="h-3.5 w-3.5 text-zinc-600" />
+              <span>Print Slip</span>
+            </Button>
+          )}
+
           {order.status === "PLACED" && (
             <Button
               size="sm"
               disabled={loading}
               onClick={() => updateStatus("ACCEPTED", "Vendor confirmed kitchen/florist capacity.")}
-              className="bg-blue-600 hover:bg-blue-700"
+              className="bg-blue-600 hover:bg-blue-700 h-8 text-xs"
             >
               ✓ Accept Order
             </Button>
@@ -202,7 +267,7 @@ export function VendorOrderCard({ order: initialOrder }: OrderProps) {
               size="sm"
               disabled={loading}
               onClick={() => updateStatus("PREPARING", "Chef & Florist started preparation.")}
-              className="bg-purple-600 hover:bg-purple-700 gap-1.5"
+              className="bg-purple-600 hover:bg-purple-700 gap-1.5 h-8 text-xs"
             >
               <Package className="h-3.5 w-3.5" />
               <span>Start Preparing</span>
@@ -214,7 +279,7 @@ export function VendorOrderCard({ order: initialOrder }: OrderProps) {
               size="sm"
               disabled={loading}
               onClick={() => updateStatus("OUT_FOR_DELIVERY", "Handed over to delivery rider.")}
-              className="bg-indigo-600 hover:bg-indigo-700 gap-1.5"
+              className="bg-indigo-600 hover:bg-indigo-700 gap-1.5 h-8 text-xs"
             >
               <Truck className="h-3.5 w-3.5" />
               <span>Dispatch with Rider</span>
@@ -226,7 +291,7 @@ export function VendorOrderCard({ order: initialOrder }: OrderProps) {
               size="sm"
               disabled={loading}
               onClick={() => updateStatus("DELIVERED", "Order delivered to recipient.")}
-              className="bg-emerald-600 hover:bg-emerald-700 gap-1.5"
+              className="bg-emerald-600 hover:bg-emerald-700 gap-1.5 h-8 text-xs"
             >
               <CheckCircle className="h-3.5 w-3.5" />
               <span>Confirm Delivery</span>
@@ -241,6 +306,13 @@ export function VendorOrderCard({ order: initialOrder }: OrderProps) {
           )}
         </div>
       </div>
+
+      {/* Print Slip Modal */}
+      <VendorPrintSlipModal
+        order={order}
+        isOpen={isPrintModalOpen}
+        onClose={() => setIsPrintModalOpen(false)}
+      />
     </div>
   );
 }

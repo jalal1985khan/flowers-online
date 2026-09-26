@@ -138,7 +138,7 @@ export function SearchBar() {
           {results.products.length > 0 ? (
             <div className="space-y-1">
               <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 px-2">
-                Matching Blooms & Bakes
+                Matching Flowers & Cakes
               </div>
               {results.products.map((p) => (
                 <Link

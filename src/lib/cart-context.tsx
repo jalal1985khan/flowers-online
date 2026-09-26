@@ -49,6 +49,7 @@ interface CartContextType {
   total: number;
   applyCoupon: (code: string) => Promise<{ success: boolean; message?: string }>;
   removeCoupon: () => void;
+  updateItemAddons: (cartItemId: string, addons: CartAddon[]) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -99,6 +100,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
     const updated = items.map((item) =>
       item.id === cartItemId ? { ...item, quantity: qty } : item
+    );
+    saveItems(updated);
+  };
+
+  const updateItemAddons = (cartItemId: string, addons: CartAddon[]) => {
+    const updated = items.map((item) =>
+      item.id === cartItemId ? { ...item, addons } : item
     );
     saveItems(updated);
   };
@@ -176,6 +184,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         total,
         applyCoupon,
         removeCoupon,
+        updateItemAddons,
       }}
     >
       {children}

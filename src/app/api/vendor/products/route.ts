@@ -79,34 +79,34 @@ export async function POST(request: Request) {
         isCustomMessageSupported: Boolean(isCustomMessageSupported),
         prepTimeMinutes: Number(prepTimeMinutes) || 60,
         tags: tags || ["Artisan", "Handcrafted"],
-        metaTitle: `${title} Delivery | Bloom & Bakes`,
+        metaTitle: `${title} Delivery | MyPetalsCart`,
         metaDescription: `Order fresh ${title} with guaranteed same-day and midnight delivery.`,
         variants: {
           create:
             variants && variants.length > 0
               ? variants.map((v: any, idx: number) => ({
-                  name: v.name,
-                  price: Number(v.price),
-                  compareAtPrice: v.compareAtPrice ? Number(v.compareAtPrice) : null,
-                  isDefault: idx === 0,
-                  stock: Number(v.stock) || 50,
-                }))
+                name: v.name,
+                price: Number(v.price),
+                compareAtPrice: v.compareAtPrice ? Number(v.compareAtPrice) : null,
+                isDefault: idx === 0,
+                stock: Number(v.stock) || 50,
+              }))
               : [
-                  {
-                    name: "Standard",
-                    price: Number(basePrice),
-                    isDefault: true,
-                    stock: 50,
-                  },
-                ],
+                {
+                  name: "Standard",
+                  price: Number(basePrice),
+                  isDefault: true,
+                  stock: 50,
+                },
+              ],
         },
         occasions:
           occasionIds && occasionIds.length > 0
             ? {
-                create: occasionIds.map((occId: string) => ({
-                  occasionId: occId,
-                })),
-              }
+              create: occasionIds.map((occId: string) => ({
+                occasionId: occId,
+              })),
+            }
             : undefined,
       },
       include: {

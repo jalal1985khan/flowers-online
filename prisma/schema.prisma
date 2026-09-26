@@ -1,6 +1,7 @@
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 generator client {
@@ -81,6 +82,7 @@ model Vendor {
   serviceAreas      VendorServiceArea[]
   products          Product[]
   orderItems        OrderItem[]
+  addons            Addon[]
 }
 
 model VendorServiceArea {
@@ -135,7 +137,8 @@ model Product {
   category                Category          @relation(fields: [categoryId], references: [id])
   basePrice               Float
   compareAtPrice          Float?
-  images                  String[]
+  images                  String[]          // Primary CDN (ImageKit)
+  cloudinaryImages        String[]          @default([]) // Mirror on Cloudinary
   isAvailable             Boolean           @default(true)
   isApproved              Boolean           @default(true)
   isEgglessAvailable      Boolean           @default(false)
@@ -181,12 +184,16 @@ model ProductOccasion {
 
 model Addon {
   id          String   @id @default(cuid())
+  vendorId    String?
+  vendor      Vendor?  @relation(fields: [vendorId], references: [id], onDelete: Cascade)
   title       String
   category    String   // Candles, Cards, Chocolates, Soft Toys
   price       Float
   image       String
-  isAvailable Boolean  @default(true)
+  isAvailable Boolean  @default(true) // active / inactive (admin control)
+  isApproved  Boolean  @default(true) // approved by admin
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
 }
 
 model DeliverySlot {

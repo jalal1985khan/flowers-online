@@ -151,7 +151,7 @@ export function PDPInteractive({
       productId: product.id,
       vendorId: product.vendorId,
       title: product.title,
-      image: product.images[0] || "",
+      image: product.images[0] || "/placeholder-product.jpg",
       variantId: selectedVariant.id,
       variantName: selectedVariant.name,
       unitPrice: currentPrice,
@@ -174,11 +174,11 @@ export function PDPInteractive({
     <div className="space-y-6">
       {/* Price Header */}
       <div className="flex items-baseline gap-3 border-b border-zinc-100 pb-4">
-        <span className="text-3xl font-extrabold text-zinc-900 font-serif">
+        <span className="text-3xl font-extrabold text-zinc-900 tracking-tight tabular-nums">
           {formatINR(currentPrice)}
         </span>
         {selectedVariant.compareAtPrice && (
-          <span className="text-base text-zinc-400 line-through">
+          <span className="text-base text-zinc-400 line-through tabular-nums">
             {formatINR(selectedVariant.compareAtPrice + egglessSurcharge)}
           </span>
         )}
@@ -415,8 +415,8 @@ export function PDPInteractive({
       <div className="sticky bottom-4 z-20 rounded-2xl border border-rose-200 bg-white/95 p-4 shadow-xl backdrop-blur-md">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <div className="text-[11px] text-zinc-500">Order Subtotal:</div>
-            <div className="text-xl font-black text-zinc-900 font-serif">
+            <div className="text-[11px] text-zinc-500 font-medium">Order Subtotal:</div>
+            <div className="text-xl font-bold text-zinc-900 tracking-tight tabular-nums">
               {formatINR(grandTotal)}
             </div>
             {slotSurcharge > 0 && (

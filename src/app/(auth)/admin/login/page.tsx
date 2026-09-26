@@ -3,9 +3,10 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ShieldCheck, Lock, Mail, ArrowLeft, Sparkles, KeyRound } from "lucide-react";
+import { Lock, Mail, ArrowLeft, Sparkles, KeyRound } from "lucide-react";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -50,14 +51,21 @@ export default function AdminLoginPage() {
     <div className="min-h-[85vh] flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
-          <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-600 text-white shadow-lg">
-            <ShieldCheck className="h-6 w-6" />
+          <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-900 border border-zinc-800 p-2.5 shadow-xl">
+            <Image
+              src="/favicon.png"
+              alt="MyPetalsCart Emblem"
+              width={48}
+              height={48}
+              className="h-full w-full object-contain"
+              priority
+            />
           </div>
           <h1 className="text-2xl font-bold font-serif text-white">
-            Super Admin Governance Console
+            MyPetalsCart Admin
           </h1>
           <p className="text-xs text-zinc-400">
-            Restricted access for marketplace operations, catalog governance, and AI Growth engine.
+            Super Admin Governance Console • Marketplace operations, catalog & inventory.
           </p>
         </div>
 

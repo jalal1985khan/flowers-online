@@ -2,6 +2,7 @@ import React from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { getProductImage } from "@/lib/product-images";
 import { formatINR } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -86,7 +87,7 @@ export default async function OrderTrackingPage({ params }: OrderTrackingProps) 
 
           <div className="rounded-2xl border border-zinc-200/80 bg-white p-3 text-right text-xs">
             <div className="text-zinc-400">Total Paid</div>
-            <div className="text-xl font-black text-rose-600 font-serif">
+            <div className="text-xl font-bold text-rose-600 tracking-tight tabular-nums">
               {formatINR(order.total)}
             </div>
             <div className="text-[10px] text-zinc-500">{order.paymentMethod}</div>
@@ -199,7 +200,7 @@ export default async function OrderTrackingPage({ params }: OrderTrackingProps) 
               <div className="flex items-center gap-3">
                 <div className="h-16 w-16 overflow-hidden rounded-xl bg-zinc-100">
                   <img
-                    src={item.product.images[0] || ""}
+                    src={getProductImage(item.product)}
                     alt={item.title}
                     className="h-full w-full object-cover"
                   />
@@ -221,7 +222,7 @@ export default async function OrderTrackingPage({ params }: OrderTrackingProps) 
 
               <div className="text-right">
                 <div className="text-xs text-zinc-500">Qty: {item.quantity}</div>
-                <div className="text-sm font-bold text-zinc-900 font-serif">
+                <div className="text-sm font-bold text-zinc-900 tracking-tight tabular-nums">
                   {formatINR(item.totalPrice)}
                 </div>
               </div>

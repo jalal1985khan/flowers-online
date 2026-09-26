@@ -1,6 +1,10 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import {
+  DEFAULT_LOCATION as DEFAULT_DELIVERY,
+  lookupPincode,
+} from "@/lib/delivery-pincodes";
 
 export interface DeliveryLocation {
   pincode: string;
@@ -9,12 +13,7 @@ export interface DeliveryLocation {
   isEligible: boolean;
 }
 
-const DEFAULT_LOCATION: DeliveryLocation = {
-  pincode: "560001",
-  city: "Bengaluru",
-  areaName: "MG Road / Central",
-  isEligible: true,
-};
+const DEFAULT_LOCATION: DeliveryLocation = { ...DEFAULT_DELIVERY };
 
 interface LocationContextType {
   location: DeliveryLocation;
@@ -26,19 +25,14 @@ interface LocationContextType {
 
 const LocationContext = createContext<LocationContextType | undefined>(undefined);
 
-const SUPPORTED_PINCODES: Record<string, { city: string; area: string }> = {
-  "560001": { city: "Bengaluru", area: "MG Road / Central" },
-  "560038": { city: "Bengaluru", area: "Indiranagar" },
-  "560034": { city: "Bengaluru", area: "Koramangala" },
-  "560068": { city: "Bengaluru", area: "Madiwala / HSR Layout" },
-  "560100": { city: "Bengaluru", area: "Electronic City" },
-  "560066": { city: "Bengaluru", area: "Whitefield" },
-  "110001": { city: "Delhi", area: "Connaught Place / Central" },
-  "110016": { city: "Delhi", area: "Hauz Khas / Green Park" },
-  "122001": { city: "Gurugram", area: "Cyber City / Sector 29" },
-  "400001": { city: "Mumbai", area: "Fort / South Mumbai" },
-  "400050": { city: "Mumbai", area: "Bandra West" },
-};
+function persistDeliveryLocation(loc: DeliveryLocation) {
+  try {
+    localStorage.setItem("bloom_delivery_location", JSON.stringify(loc));
+    document.cookie = `bloom_delivery_location=${encodeURIComponent(JSON.stringify(loc))};path=/;max-age=31536000;SameSite=Lax`;
+  } catch {
+    // ignore
+  }
+}
 
 export function LocationProvider({ children }: { children: React.ReactNode }) {
   const [location, setLocationState] = useState<DeliveryLocation>(DEFAULT_LOCATION);
@@ -48,26 +42,25 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
     try {
       const saved = localStorage.getItem("bloom_delivery_location");
       if (saved) {
-        setLocationState(JSON.parse(saved));
+        const parsed = JSON.parse(saved) as DeliveryLocation;
+        setLocationState(parsed);
+        persistDeliveryLocation(parsed);
+      } else {
+        persistDeliveryLocation(DEFAULT_LOCATION);
       }
     } catch {
-      // ignore
+      persistDeliveryLocation(DEFAULT_LOCATION);
     }
   }, []);
 
   const setLocation = (loc: DeliveryLocation) => {
     setLocationState(loc);
-    try {
-      localStorage.setItem("bloom_delivery_location", JSON.stringify(loc));
-    } catch {
-      // ignore
-    }
+    persistDeliveryLocation(loc);
   };
 
   const checkPincode = async (pin: string) => {
-    const cleanPin = pin.trim();
-    if (SUPPORTED_PINCODES[cleanPin]) {
-      const info = SUPPORTED_PINCODES[cleanPin];
+    const info = lookupPincode(pin.trim());
+    if (info) {
       return { valid: true, city: info.city, area: info.area };
     }
     return { valid: false };

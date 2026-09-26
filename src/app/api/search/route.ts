@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getProductImage } from "@/lib/product-images";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -48,7 +49,7 @@ export async function GET(request: Request) {
         title: p.title,
         slug: p.slug,
         basePrice: p.basePrice,
-        image: p.images[0] || "",
+        image: getProductImage(p),
         categoryName: p.category.name,
       })),
       categories: categories.map((c) => ({
